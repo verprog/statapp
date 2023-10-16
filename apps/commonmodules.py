@@ -88,7 +88,14 @@ def get_table(dataframe):
 
 
 def get_header():
-
+    # navbar = html.Div([
+    #
+    #     html.Div([
+    #         html.H1(
+    #             'Шапка сторінки з показниками програм')
+    #     ], className="twelve columns padded"),
+    #
+    # ], className="row gs-header gs-text-header")
     navbar = dbc.NavbarSimple(
         children=[
             dbc.NavItem(dbc.NavLink("Про ДАР", href="https://www.dar.gov.ua/about-dar")),
@@ -108,9 +115,8 @@ def get_header():
         ],
         brand="Статистика ДАР",
         brand_href="#",
-        color="bg-opacity-75",
         # dark=True,
-        className="bg-opacity-25 p-2 m-1 bg-primary text-dark fw-bold rounded"
+        className="bg-opacity-75 p-2 m-1 mx-auto bg-light text-dark fw-bold border rounded"
     )
     return navbar
 
