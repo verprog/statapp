@@ -16,6 +16,17 @@ from dash.dash_table.Format import Format, Scheme, Trim
 csv_file_path = 'apps/data/base_result.csv'
 # Прочитайте CSV-файл и создайте DataFrame
 dfu = pd.read_csv(csv_file_path)
+# using dictionary to convert specific columns
+convert_dict = {
+    'region': str,
+    'legalform': str,
+    'area': int,
+    'animal': float,
+    'giftamount': int,
+    'cntuser': float
+}
+
+dfu = dfu.astype(convert_dict)
 dfu.rename(columns={'registrationdate': 'Дата реєстрації',
                             'region': 'Регіон',
                             'legalform': 'Тип особи',
@@ -55,7 +66,7 @@ def get_table(dataframe):
                         page_size=10,
                         sort_action='native',
                         style_table={'overflowX': 'auto'},
-                        style_cell={'textAlign': 'left'},
+                        # style_cell={'textAlign': 'left'},
                         style_header={'border': '1px solid black', 'textAlign': 'center', 'fontWeight': 'bold'},
                         style_data_conditional=[
                             {
