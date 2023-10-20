@@ -10,12 +10,14 @@ import plotly.graph_objects as go
 import pandas as pd
 from dash import Dash, dcc, html, Output, Input, State, callback, no_update, dash_table
 import dash_ag_grid as dag
+import dash_mantine_components as dmc
 from dash.dash_table.Format import Format, Scheme, Trim
 
 # Укажите путь к вашему CSV-файлу
 csv_file_path = 'apps/data/base_result.csv'
 # Прочитайте CSV-файл и создайте DataFrame
 dfu = pd.read_csv(csv_file_path)
+
 # using dictionary to convert specific columns
 convert_dict = {
     'region': str,
@@ -47,7 +49,7 @@ selector_type = html.Div([
         clearable=True,
         # multi=True
     )
-], style={'width': '15em'})
+], style={'min-width': '15em'})
 
 
 selector_region = html.Div([
@@ -110,8 +112,11 @@ def get_header():
     navbar = dbc.NavbarSimple(
         children=[
             dbc.NavItem(dbc.NavLink("Про ДАР", href="https://www.dar.gov.ua/about-dar")),
+            dmc.Divider(orientation="vertical", style={"height": 40}),
             dbc.NavItem(dbc.NavLink("Новини", href="https://www.dar.gov.ua/news")),
+            dmc.Divider(orientation="vertical", style={"height": 40}),
             dbc.NavItem(dbc.NavLink("Корисне", href="https://www.dar.gov.ua/useful")),
+            dmc.Divider(orientation="vertical", style={"height": 40}),
             dbc.DropdownMenu(
                 children=[
                     dbc.DropdownMenuItem("Номери для звязку", header=True),
@@ -122,7 +127,8 @@ def get_header():
                 in_navbar=True,
                 label="Наші телефони",
             ),
-            dbc.NavItem(dbc.NavLink("Увійти до кабінету", href="http://reg.dar.gov.ua")),
+            dbc.Button("Увійти до кабінету", href="http://reg.dar.gov.ua", outline=True, color="primary", className="me-1"),
+            # dbc.NavItem(dbc.NavLink("Увійти до кабінету", href="http://reg.dar.gov.ua")),
         ],
         brand="Статистика ДАР",
         brand_href="#",
@@ -313,7 +319,7 @@ def get_map():
                         clickmode='event+select'
                         )
 
-    hovertemp = '<i>Територія:</i> %{customdata[0]}<br><i>Şehir Statüsü:</i> %{customdata[1]}<br>'
+    hovertemp = '<i>Територія:</i> %{customdata[0]}<br><i>Код регіону:</i> %{customdata[1]}<br>'
     fig.update_traces(hovertemplate=hovertemp)
     fig.update_geos(fitbounds="locations", visible=False)
     # # fig.update(layout_coloraxis_showscale=False)

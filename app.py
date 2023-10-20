@@ -13,6 +13,7 @@ app = dash.Dash(
 )
 app._favicon = ('assets/favicon.ico')
 server = app.server
+
 # app.config.suppress_callback_exceptions = True
 navbar = commonmodules.get_header()
 sidebar = commonmodules.get_sidebar2()
@@ -66,4 +67,4 @@ def toggle_collapse(n, is_open):
 
 
 if __name__ == "__main__":
-    app.run_server(port=8051, debug=True)
+    app.run_server(port=8051, debug=False)

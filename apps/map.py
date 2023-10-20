@@ -81,10 +81,7 @@ def store_data(selectedData):
            Input('choropleth_map', 'selectedData')],
           )
 def store_data(value,typ,regionsel,select):
-    print(typ)
-    print(regionsel)
-    print(select)
-    print('*'*10)
+
     begin = get_period(value)['start']
     end = get_period(value)['end']
     # listlocation = [str(i['location']).upper() for i in select['points']]
