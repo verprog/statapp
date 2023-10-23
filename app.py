@@ -11,7 +11,7 @@ app = dash.Dash(
                 'content': 'width=device-width, initial-scale=1.0, maximum-scale=1.2, minimum-scale=0.5,'}],
     suppress_callback_exceptions=True
 )
-app._favicon = ('assets/favicon.ico')
+app._favicon = 'assets/favicon.ico'
 server = app.server
 
 # app.config.suppress_callback_exceptions = True
@@ -67,4 +67,4 @@ def toggle_collapse(n, is_open):
 
 
 if __name__ == "__main__":
-    app.run_server(port=8051, debug=False)
+    app.run_server(debug=False)
