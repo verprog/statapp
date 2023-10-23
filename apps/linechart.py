@@ -5,8 +5,6 @@ from dash import dcc,html
 from dash.dependencies import Input, Output
 from apps import commonmodules
 
-from app import app
-
 
 layout = html.Div([
     # commonmodules.get_header(),
