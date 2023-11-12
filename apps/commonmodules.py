@@ -8,62 +8,110 @@ import plotly.express as px
 import plotly.offline as plot
 import plotly.graph_objects as go
 import pandas as pd
+import numpy as np
 from dash import Dash, dcc, html, Output, Input, State, callback, no_update, dash_table
 import dash_ag_grid as dag
 import dash_mantine_components as dmc
 from dash.dash_table.Format import Format, Scheme, Trim
+import datetime
+
+now = datetime.datetime.now()
+last_day = (now - datetime.timedelta(1))
 
 # Укажите путь к вашему CSV-файлу
-csv_file_path = 'apps/data/base_result.csv'
+csv_file_map = 'apps/data/base_result.csv'
+csv_file_prof = 'apps/data/UsersView.csv'
 # Прочитайте CSV-файл и создайте DataFrame
-dfu = pd.read_csv(csv_file_path)
+dfu = pd.read_csv(csv_file_map)
+df_prof = pd.read_csv(csv_file_prof)
+df_prof['Group1LandParcelArea'].replace(np.nan,0, regex=True, inplace=True)
 
 # using dictionary to convert specific columns
-convert_dict = {
+convert_dict_map = {
     'region': str,
     'legalform': str,
     'area': int,
     'animal': float,
     'giftamount': int,
-    'cntuser': float
+    'cntuser': float,
+}
+convert_dict_prof = {
+    'Region': str,
+    'LegalForm': str,
+    'Group1LandParcelArea': int,
+    'Gender': str,
+    'KindName': str,
 }
 
-dfu = dfu.astype(convert_dict)
+dfu = dfu.astype(convert_dict_map)
+df_prof = df_prof.astype(convert_dict_prof)
 dfu.rename(columns={'registrationdate': 'Дата реєстрації',
                             'region': 'Регіон',
                             'legalform': 'Тип особи',
                             'area': 'Площа, га.',
                             'animal': 'Кіл-сть тварин',
                             'giftamount': 'Надано підтримки, грн',
-                            'cntuser': 'Кількість користувачів'}, inplace=True)
+                            'cntuser': 'Кількість користувачів',}, inplace=True)
+
+df_prof.rename(columns={'RegistrationDate': 'Дата реєстрації',
+                            'KindName': 'КВЕД',
+                            'Id': 'Id користувача',
+                            'Region': 'Регіон',
+                            'LegalForm': 'Тип особи',
+                            'Gender': 'Стать',
+                            'Group1LandParcelArea': 'Площа, га.',}, inplace=True)
+
+df_prof = df_prof[['Дата реєстрації','Стать', 'Id користувача', 'Тип особи', 'Регіон', 'КВЕД', 'Площа, га.']]
 
 mapData = dfu[['Площа, га.', 'Кіл-сть тварин', 'Надано підтримки, грн', 'Кількість користувачів']]
 mapIndicator = pd.DataFrame(mapData.sum(axis=0, skipna=True)).reset_index()
 mapIndicator.rename(columns={'index': 'DATA', 0: 'VALUE'}, inplace=True)
 
-selector_type = html.Div([
-    dcc.Dropdown(
-        id='type_user_selector',
-        options=[x for x in dfu['Тип особи'].unique()],
-        value='',
-        clearable=True,
-        # multi=True
-    )
-], style={'min-width': '15em'})
+typelst = [x for x in dfu['Тип особи'].sort_values().unique()]
+regionlst = [x.upper() for x in dfu['Регіон'].sort_values().unique()]
+arealst =[
+           {'label': 'Всі дані', 'value': -1},
+           {'label': 'до 5 га', 'value': 1},
+           {'label': 'від 5 до 120 га', 'value': 2},
+           {'label': 'від 120 до 500 га', 'value': 3},
+           {'label': 'від 500 до 1000 га', 'value': 4},
+           {'label': 'понад 1000 га', 'value': 5},
+            ]
+genderlst = [
+           {'label': 'Всі гендери', 'value': '-1'},
+           {'label': 'Чоловіча', 'value': 'Чоловіча'},
+           {'label': 'Жіноча', 'value': 'Жіноча'},
+            ]
+
+def get_selector(idname, plholder, optionvalue,clerablebool, multibool):
+    selector = html.Div([
+        dcc.Dropdown(
+            id=idname,
+            placeholder=plholder,
+            options=optionvalue,
+            value='',
+            clearable=clerablebool,
+            multi=multibool
+        )
+    ], style={'min-width': '20em'})
+    return selector
+
+def get_datepicker(idname):
+    datepicker_period = dcc.DatePickerRange(
+                          id=idname,
+                          first_day_of_week=1,
+                          day_size=50,
+                          min_date_allowed=datetime.date(2010, 1, 1),
+                          max_date_allowed=last_day.date(),
+                          initial_visible_month=last_day.date(),
+                          start_date=last_day.replace(day=1).replace(month=1).date(),
+                          end_date=last_day.date(),
+                          display_format='DD.MM.YYYY',
+                      )
+    return datepicker_period
 
 
-selector_region = html.Div([
-    dcc.Dropdown(
-        id='region_selector',
-        options=[x.upper() for x in dfu['Регіон'].sort_values().unique()],
-        value='',
-        clearable=True,
-        multi=True
-    )
-], style={'min-width': '20em'})
-
-
-def get_table(dataframe):
+def get_table(dataframe, idname):
     format_table = dict(page_current=0,
                         page_size=10,
                         sort_action='native',
@@ -95,10 +143,8 @@ def get_table(dataframe):
                         ]
                         )
     data = dataframe.to_dict('records')
-    columns = [{"name": i, "id": i, } for i in (dataframe.columns)]
-    return dash_table.DataTable(data=data, columns=columns, id='table-sorting-filtering', **format_table)
-
-
+    columns = [{"name": i, "id": i, } for i in dataframe.columns]
+    return dash_table.DataTable(data=data, columns=columns, id=idname, **format_table)
 
 def get_header():
     # navbar = html.Div([
@@ -111,11 +157,11 @@ def get_header():
     # ], className="row gs-header gs-text-header")
     navbar = dbc.NavbarSimple(
         children=[
-            dbc.NavItem(dbc.NavLink("Про ДАР", href="https://www.dar.gov.ua/about-dar")),
+            dbc.NavItem(dbc.NavLink("Про ДАР", href="https://www.dar.gov.ua/about-dar",className="menu_list-link"), className="menu_list-item"),
             dmc.Divider(orientation="vertical", style={"height": 40}),
-            dbc.NavItem(dbc.NavLink("Новини", href="https://www.dar.gov.ua/news")),
+            dbc.NavItem(dbc.NavLink("Новини", href="https://www.dar.gov.ua/news",className="menu_list-link"), className="menu_list-item"),
             dmc.Divider(orientation="vertical", style={"height": 40}),
-            dbc.NavItem(dbc.NavLink("Корисне", href="https://www.dar.gov.ua/useful")),
+            dbc.NavItem(dbc.NavLink("Корисне", href="https://www.dar.gov.ua/useful",className="menu_list-link"), className="menu_list-item"),
             dmc.Divider(orientation="vertical", style={"height": 40}),
             dbc.DropdownMenu(
                 children=[
@@ -127,8 +173,9 @@ def get_header():
                 in_navbar=True,
                 label="Наші телефони",
             ),
-            dbc.Button("Увійти до кабінету", href="http://reg.dar.gov.ua", outline=True, color="primary", className="me-1"),
-            # dbc.NavItem(dbc.NavLink("Увійти до кабінету", href="http://reg.dar.gov.ua")),
+            dbc.Button("Увійти до кабінету", href="http://reg.dar.gov.ua",
+                       className="btn_sign js-btn_sign", style={"height": "1cm"}
+                       ),
         ],
         brand="Статистика ДАР",
         brand_href="#",
@@ -140,10 +187,22 @@ def get_header():
 def get_menu():
     menu = html.Div([
 
-        dcc.Link('Home   ', href='/', className="p-2 text-dark"),
-        dcc.Link('Line Chart   ', href='/linechart', className="p-2 text-dark"),
-        dcc.Link('Bar Chart   ', href='/barchart', className="p-2 text-dark"),
-        dcc.Link('Scatterplot    ', href='/scatterplot', className="p-2 text-dark"),
+        dcc.Link("Про ДАР", href="https://www.dar.gov.ua/about-dar", target="https://www.dar.gov.ua/about-dar", className="p-2 text-dark"),
+        dcc.Link("Новини", href="https://www.dar.gov.ua/news", target="https://www.dar.gov.ua/news", className="p-2 text-dark"),
+        dcc.Link("Корисне", href="https://www.dar.gov.ua/useful",target="https://www.dar.gov.ua/useful", className="p-2 text-dark"),
+        dbc.DropdownMenu(
+            children=[
+                dbc.DropdownMenuItem("Номери для звязку", header=True),
+                dbc.DropdownMenuItem("044 339 92 15", href="tel:+380443399215"),
+                dbc.DropdownMenuItem("044 224 59 33", href="tel:+380442245933"),
+            ],
+            nav=True,
+            in_navbar=True,
+            label="Наші телефони",
+        ),
+        dbc.Button("Увійти до кабінету", href="http://reg.dar.gov.ua",
+                   className="btn_sign js-btn_sign", style={"height": "1cm"}
+                   )
 
     ], className="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm")
     return menu
@@ -237,11 +296,11 @@ def get_sidebar2():
                 [
 
                     dbc.NavLink([html.I(className="fas fa-layer-group me-2"), html.Span("Основні результати"), ],
-                                href="/map",
+                                href="/",
                                 active="exact",
                                 ),
                     dbc.NavLink([html.I(className="fas fa-solid fa-clipboard-user me-2"), html.Span("Профіль користувача")],
-                        href="/",
+                        href="/profile",
                         active="exact",
                     ),
                     dbc.NavLink([html.I(className="fas fa-solid fa-earth-europe me-2"),html.Span("Земельний банк"),],
@@ -339,6 +398,69 @@ def get_map():
     #     height=600,  # Установите желаемую высоту
     # )
     # plot_div = plot(fig, output_type='div', include_plotlyjs=False)
+    # fig.update_layout(
+    #     autosize=False,
+    #     margin=dict(
+    #         l=0,
+    #         r=0,
+    #         b=0,
+    #         t=0,
+    #         pad=4,
+    #         autoexpand=True
+    #     ),
+    #     # width=800,
+    # #     height=400,
+    # )
     return fig
 
 
+def get_rangearea(num=-1):
+    d = dict()
+    if num == -1:
+        area_start = 0
+        area_end = 999999999
+    elif num == 1:
+        area_start = 0
+        area_end = 5
+    elif num == 2:
+        area_start = 5
+        area_end = 120
+    elif num == 3:
+        area_start = 120
+        area_end = 500
+    elif num == 4:
+        area_start = 500
+        area_end = 1000
+    elif num == 5:
+        area_start = 1000
+        area_end = 999999999
+    else:
+        area_start = 0
+        area_end = 999999999
+    d['start'] = area_start
+    d['end'] = area_end
+    return d
+
+
+dbc.DropdownMenu(
+    children=[
+        dcc.Checklist(
+            options={
+                '-1': 'Вібрати все',
+                '0': ' Очистити',
+            },
+            value='',
+            inline=True
+        ),
+        dmc.Space(h=30),
+        dcc.Checklist(
+            options={
+                'NYC': 'New York City',
+                'MTL': 'Montreal',
+                'SF': 'San Francisco'
+            },
+            value=['MTL']
+        ),
+    ],
+    label="menu",
+),

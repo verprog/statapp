@@ -1,0 +1,30 @@
+@font-face {
+  font-family: 'MyFont';
+  src: url('../webfont.eot'); /* Поддерживается в IE9 */
+  src: url('webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('webfont.woff2') format('woff2'), /* Для супер современных браузеров */
+       url('webfont.woff') format('woff'), /* Для супер современных браузеров */
+       url('webfont.ttf')  format('truetype'), /* Для Сафари, Андроид, iOS и почти всех других */
+       url('webfont.svg#svgFontName') format('svg'); /* Для iOS */
+}
+"btn_sign js-btn_sign"
+.btn_register, .btn_sign, .btn_sign-auth {
+  margin: 0;
+    margin-left: 0px;
+  padding: 12px 20px;
+  border-radius: 40px;
+  font-family: "e-ukraine",sans-serif;
+  font-size: 13px;
+  color: #fff;
+  font-weight: 400;
+  line-height: 16px;
+}
+@media (min-width: 768px) {
+  .btn-fill, .btn_sign, .btn_sign-auth, .btn_more-news, .btn_send {
+    transition: 0.2s ease-in-out;
+    background-image: linear-gradient(217deg, rgba(255,0,0,0.8), rgba(255,0,0,0) 70.71%),linear-gradient(127deg, rgba(0,0,255,0.8), rgba(0,0,255,0) 70.71%),linear-gradient(336deg, rgba(0,255,0,0.8), rgba(0,255,0,0) 70.71%);
+    background-size: 200% 300%;
+    -webkit-animation: 10s infinite granimate;
+    animation: 10s infinite granimate;
+  }
+}

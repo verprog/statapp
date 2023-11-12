@@ -5,8 +5,7 @@ import plotly.express as px
 import pandas as pd
 from dash import Dash, dcc, html, Output, Input, State, callback, no_update, dash_table
 from apps import commonmodules
-from apps.commonmodules import get_table, selector_type, selector_region
-from apps.timemodul import period_group,get_period
+from apps.commonmodules import get_table, get_selector, get_datepicker
 import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
 
@@ -42,22 +41,24 @@ def drawText(pdata,pvalue):
 dfu = commonmodules.dfu
 mapIndicator = commonmodules.mapIndicator
 fig = commonmodules.get_map()
-
+selector_period = get_datepicker('date_picker')
+selector_type = get_selector('type_user_selector', "Вибір особи", commonmodules.typelst, True, False)
+selector_region = get_selector('region_selector', "Вибір регіонів", commonmodules.regionlst, True, True)
 
 layout = html.Div([
 dbc.Card(
         dbc.CardBody([dbc.Row([ dbc.Col([drawText(i[0],i[1])], width=3) for i in mapIndicator.values], align='center'),
             html.Br(),
-            dbc.Row(dbc.Card(dbc.CardBody([period_group, selector_type, selector_region], className="row row-cols-auto mb-4"))),   #"maxHeight": "5vh",, style={ "background-color": "grey"}
+            dbc.Row(dbc.Card(dbc.CardBody([selector_period, selector_type, selector_region], className="row row-cols-auto mb-4"))),
             html.Br(),
             dbc.Row([dbc.Col([drawFigure()], width=6),dbc.Col([dbc.Card(
             dbc.CardBody(dcc.Graph(id='choropleth_map',figure=fig,config={'scrollZoom': False})))], width=6),], align='center'),
             html.Br(),
-            dbc.Row(id='div_dash_tab', align='center'),
+            dbc.Row(id='dash_tab_map', align='center'),
             html.Br(),
             dbc.Row([dbc.Col(width=10),
                      dbc.Col([dbc.Button("Download Excel", id="btn_xlsx"),
-                     dcc.Download(id="download-dataframe-xlsx")], width=2)], align='center'),
+                     dcc.Download(id="download-xlsx-map")], width=2)], align='center'),
         ]), color='light'
     )
 ])
@@ -74,25 +75,26 @@ def store_data(selectedData):
         listlocation = [str(i['location']).upper() for i in selectedData['points']]
         return listlocation
 
-@callback(Output('div_dash_tab', 'children'),
-          [Input("radios", "value"),
+
+@callback(Output('dash_tab_map', 'children'),
+          [Input("date_picker", "start_date"),
+           Input("date_picker", "end_date"),
            Input('type_user_selector', 'value'),
            Input('region_selector', 'value'),
            Input('choropleth_map', 'selectedData')],
           )
-def store_data(value,typ,regionsel,select):
-
-    begin = get_period(value)['start']
-    end = get_period(value)['end']
+def store_data(start_date, end_date, typ, regionsel, select):
+    begin = start_date
+    end = end_date
     # listlocation = [str(i['location']).upper() for i in select['points']]
     condType = " " if typ is None or typ == "" else "and `Тип особи` == @typ"
     condRegion = " " if regionsel is None or regionsel == "" or regionsel == [] else "and Регіон == @regionsel"
     filter_data = dfu.query(f"(`Дата реєстрації`>=@begin and `Дата реєстрації`<=@end) {condType} {condRegion}")
 
-    return get_table(filter_data)
+    return get_table(filter_data,'table-sorting-filtering')
 
 @callback(
-    Output("download-dataframe-xlsx", "data"),
+    Output("download-xlsx-map", "data"),
     Input("btn_xlsx", "n_clicks"),
     State("table-sorting-filtering", "data"),
     prevent_initial_call=True,

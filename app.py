@@ -1,9 +1,9 @@
 import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, State, dcc, html, callback
-from apps import linechart, map, home, commonmodules
+from apps import linechart, map, home, commonmodules, userprofile
 
-app = dash.Dash(
+app = dash.Dash(assets_folder='assets',
     # external_stylesheets=[dbc.themes.BOOTSTRAP],
     title='Статистика ДАР',
     external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.FONT_AWESOME],
@@ -28,9 +28,9 @@ app.layout = html.Div([dcc.Location(id="url"), navbar, sidebar, content])
     [Input("url", "pathname")])
 def render_page_content(pathname):
     if pathname == "/":
-        return home.layout
-    elif pathname == "/map":
         return map.layout
+    elif pathname == "/profile":
+        return userprofile.layout
     elif pathname == "/linechart":
         return linechart.layout
     # If the user tries to reach a different page, return a 404 message
@@ -67,4 +67,4 @@ def toggle_collapse(n, is_open):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=False)
+    app.run_server()
