@@ -1,7 +1,7 @@
 import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, State, dcc, html, callback
-from apps import linechart, map, home, commonmodules, userprofile
+from apps import landbank, animals, supportflows, recipients, home, baseresult, userprofile,  commonmodules
 
 app = dash.Dash(assets_folder='assets',
     # external_stylesheets=[dbc.themes.BOOTSTRAP],
@@ -24,15 +24,25 @@ app.layout = html.Div([dcc.Location(id="url"), navbar, sidebar, content])
 
 
 @app.callback(
-    Output("page-content", "children"),
+[Output("page-content", "children"),
+        Output("id_header", "brand")],
     [Input("url", "pathname")])
 def render_page_content(pathname):
-    if pathname == "/":
-        return map.layout
+    nm = "Статистика ДАР"
+    if pathname == "/base":
+        return baseresult.layout, f"{nm} - Основні результати"
     elif pathname == "/profile":
-        return userprofile.layout
-    elif pathname == "/linechart":
-        return linechart.layout
+        return userprofile.layout, f"{nm} - Профіль користувача"
+    elif pathname == "/land":
+        return landbank.layout, f"{nm} - Земельний банк"
+    elif pathname == "/animals":
+        return animals.layout, f"{nm} - Тварини"
+    elif pathname == "/supportflows":
+        return supportflows.layout, f"{nm} - Аналіз напрямів підтримки"
+    elif pathname == "/recipients":
+        return recipients.layout, f"{nm} - Перелік отримувачів"
+    elif pathname == "/":
+        return home.layout, f"{nm}"
     # If the user tries to reach a different page, return a 404 message
     return html.Div(
         [
@@ -67,4 +77,4 @@ def toggle_collapse(n, is_open):
 
 
 if __name__ == "__main__":
-    app.run_server()
+    app.run_server(debug=True)

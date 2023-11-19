@@ -15,36 +15,58 @@ import dash_mantine_components as dmc
 from dash.dash_table.Format import Format, Scheme, Trim
 import datetime
 
+
+# pd.options.display.float_format = '{:,.2f}'.format
+
+
 now = datetime.datetime.now()
 last_day = (now - datetime.timedelta(1))
 
 # Укажите путь к вашему CSV-файлу
 csv_file_map = 'apps/data/base_result.csv'
 csv_file_prof = 'apps/data/UsersView.csv'
+csv_file_land = 'apps/data/LandData.csv'
+csv_file_animal = 'apps/data/AnimalData.csv'
+csv_file_prog = 'apps/data/ProgramsData.csv'
+csv_file_recip = 'apps/data/RecipientDate.csv'
+
 # Прочитайте CSV-файл и создайте DataFrame
 dfu = pd.read_csv(csv_file_map)
 df_prof = pd.read_csv(csv_file_prof)
 df_prof['Group1LandParcelArea'].replace(np.nan,0, regex=True, inplace=True)
+df_land = pd.read_csv(csv_file_land)
+df_animal = pd.read_csv(csv_file_animal)
+df_prog = pd.read_csv(csv_file_prog)
+df_profile = pd.read_csv(csv_file_recip)
+
 
 # using dictionary to convert specific columns
 convert_dict_map = {
-    'region': str,
-    'legalform': str,
-    'area': int,
-    'animal': float,
-    'giftamount': int,
-    'cntuser': float,
-}
+                    'region': str,
+                    'legalform': str,
+                    'area': int,
+                    'animal': float,
+                    'giftamount': int,
+                    'cntuser': float,
+                    }
 convert_dict_prof = {
-    'Region': str,
-    'LegalForm': str,
-    'Group1LandParcelArea': int,
-    'Gender': str,
-    'KindName': str,
-}
-
+                    'Region': str,
+                    'LegalForm': str,
+                    'Group1LandParcelArea': int,
+                    'Gender': str,
+                    'KindName': str,
+                    }
+convert_dict_land = {
+                    'Region': str,
+                    'LegalForm': str,
+                    'PropRight': str,
+                    'Purpose': str,
+                    'Area': float,
+                    'Subject': int,
+                    }
 dfu = dfu.astype(convert_dict_map)
 df_prof = df_prof.astype(convert_dict_prof)
+df_land = df_land.astype(convert_dict_land)
 dfu.rename(columns={'registrationdate': 'Дата реєстрації',
                             'region': 'Регіон',
                             'legalform': 'Тип особи',
@@ -55,13 +77,57 @@ dfu.rename(columns={'registrationdate': 'Дата реєстрації',
 
 df_prof.rename(columns={'RegistrationDate': 'Дата реєстрації',
                             'KindName': 'КВЕД',
-                            'Id': 'Id користувача',
+                            'Id': 'Користувач',
                             'Region': 'Регіон',
                             'LegalForm': 'Тип особи',
                             'Gender': 'Стать',
                             'Group1LandParcelArea': 'Площа, га.',}, inplace=True)
 
-df_prof = df_prof[['Дата реєстрації','Стать', 'Id користувача', 'Тип особи', 'Регіон', 'КВЕД', 'Площа, га.']]
+df_land.rename(columns={'PropRight': 'Тип речового права',
+                            'Purpose': 'КВЕД',
+                            'Region': 'Регіон',
+                            'LegalForm': 'Тип особи',
+                            'Area': 'Площа, га.',
+                            'Subject': "Суб'єкти",}, inplace=True)
+
+df_animal.rename(columns={ 'LegalForm': 'Тип особи',
+                            'Region': 'Регіон',
+                            'Name': 'Вид тварини',
+                            'SexName': 'Назва',
+                            'AnimalGender': 'Стать',
+                            'animal': "Кіл-ть",}, inplace=True)
+
+df_prog.rename(columns={ 'CreateAt': 'Дата подачі заявки',
+                            'LegalForm': 'Тип особи',
+                            'Region': 'Регіон',
+                            'TypeProgram': 'Тип програми',
+                            'NameProgram': 'Назва програми',
+                            'organization': 'Надавач підтримки',
+                            'TotalAmount': 'Бюджет програми',
+                            'DesiredAmount': 'Запросили суму',
+                            'ProvidedAmount': 'Отримана сума',
+                            'LandParcelCount': 'Площа землі у заявці',
+                            'AnimalCount': 'Кількість тварин у заявці',}, inplace=True)
+
+df_profile[['NameProgram','TypeProgram','LegalForm','Id','Region','District','CreateAt',
+'organization','DesiredAmount','ProvidedAmount','Area','LandParcelCount','QuantityAnimal','AnimalCount']]
+df_profile.rename(columns={'NameProgram': 'Назва програми',
+                        'TypeProgram': 'Тип програми',
+                        'LegalForm': 'Тип особи',
+                        'Id': "Користувач",
+                        'Region': 'Регіон',
+                        'District': 'Район',
+                        'CreateAt': 'Дата подачі заявки',
+                        'organization': 'Надавач підтримки',
+                        'DesiredAmount': 'Запросили суму',
+                        'ProvidedAmount': 'Отримана сума',
+                        'Area': "Загальна площа землі",
+                        'LandParcelCount': 'Площа землі у заявці',
+                        'QuantityAnimal': "Загальна кількість тварин",
+                        'AnimalCount': 'Кількість тварин у заявці',}, inplace=True)
+
+
+df_prof = df_prof[['Дата реєстрації','Стать', 'Користувач', 'Тип особи', 'Регіон', 'КВЕД', 'Площа, га.']]
 
 mapData = dfu[['Площа, га.', 'Кіл-сть тварин', 'Надано підтримки, грн', 'Кількість користувачів']]
 mapIndicator = pd.DataFrame(mapData.sum(axis=0, skipna=True)).reset_index()
@@ -69,6 +135,17 @@ mapIndicator.rename(columns={'index': 'DATA', 0: 'VALUE'}, inplace=True)
 
 typelst = [x for x in dfu['Тип особи'].sort_values().unique()]
 regionlst = [x.upper() for x in dfu['Регіон'].sort_values().unique()]
+kvedlst = [x for x in df_prof['КВЕД'].sort_values().unique()]
+kvedlandlst = [x for x in df_land['КВЕД'].sort_values().unique()]
+rightlst = [x for x in df_land['Тип речового права'].sort_values().unique()]
+animallst = [x for x in df_animal['Вид тварини'].sort_values().unique()]
+genderanimallst = [x for x in df_animal['Стать'].sort_values().unique()]
+typeprolst = [x for x in df_prog['Тип програми'].sort_values().unique()]
+typesuplst = [x for x in df_prog['Назва програми'].sort_values().unique()]
+typeprolstp = [x for x in df_profile['Тип програми'].sort_values().unique()]
+typesuplstp = [x for x in df_profile['Назва програми'].sort_values().unique()]
+providerstp = [x for x in df_profile['Надавач підтримки'].sort_values().unique()]
+
 arealst =[
            {'label': 'Всі дані', 'value': -1},
            {'label': 'до 5 га', 'value': 1},
@@ -93,7 +170,7 @@ def get_selector(idname, plholder, optionvalue,clerablebool, multibool):
             clearable=clerablebool,
             multi=multibool
         )
-    ], style={'min-width': '20em'})
+    ], style={'min-width': '20em', 'padding-top': '3px'})
     return selector
 
 def get_datepicker(idname):
@@ -107,13 +184,14 @@ def get_datepicker(idname):
                           start_date=last_day.replace(day=1).replace(month=1).date(),
                           end_date=last_day.date(),
                           display_format='DD.MM.YYYY',
+                            style={'max-height': '25px', 'padding-top': '3px'}
                       )
     return datepicker_period
 
 
 def get_table(dataframe, idname):
     format_table = dict(page_current=0,
-                        page_size=10,
+                        page_size=20,
                         sort_action='native',
                         style_table={'overflowX': 'auto'},
                         # style_cell={'textAlign': 'left'},
@@ -155,7 +233,7 @@ def get_header():
     #     ], className="twelve columns padded"),
     #
     # ], className="row gs-header gs-text-header")
-    navbar = dbc.NavbarSimple(
+    navbar = dbc.NavbarSimple(id="id_header",
         children=[
             dbc.NavItem(dbc.NavLink("Про ДАР", href="https://www.dar.gov.ua/about-dar",className="menu_list-link"), className="menu_list-item"),
             dmc.Divider(orientation="vertical", style={"height": 40}),
@@ -295,8 +373,12 @@ def get_sidebar2():
             dbc.Nav(
                 [
 
-                    dbc.NavLink([html.I(className="fas fa-layer-group me-2"), html.Span("Основні результати"), ],
+                    dbc.NavLink([html.I(className="fas fa-house me-2"), html.Span("Домашня сторінка"), ],
                                 href="/",
+                                active="exact",
+                                ),
+                    dbc.NavLink([html.I(className="fas fa-layer-group me-2"), html.Span("Основні результати"), ],
+                                href="/base",
                                 active="exact",
                                 ),
                     dbc.NavLink([html.I(className="fas fa-solid fa-clipboard-user me-2"), html.Span("Профіль користувача")],
@@ -304,7 +386,7 @@ def get_sidebar2():
                         active="exact",
                     ),
                     dbc.NavLink([html.I(className="fas fa-solid fa-earth-europe me-2"),html.Span("Земельний банк"),],
-                        href="/projects",
+                        href="/land",
                         active="exact",
                     ),
                     dbc.NavLink([html.I(className="fa-solid fa-cow me-2"),html.Span("Тварини"),],
@@ -312,7 +394,7 @@ def get_sidebar2():
                         active="exact",
                     ),
                     dbc.NavLink([html.I(className="fas fa-solid fa-microscope me-2"),html.Span("Аналіз напрямів підтримки"),],
-                        href="/supportareas",
+                        href="/supportflows",
                         active="exact",
                     ),
                     dbc.NavLink([html.I(className="fa-solid fa-arrows-down-to-people me-2"),html.Span("Перелік отримувачів"),],
