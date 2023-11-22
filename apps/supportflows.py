@@ -21,7 +21,7 @@ selector_typesup = get_selector('typesup_selector_flows', "Назва прогр
 layout = html.Div([
                 dbc.Card(
                         dbc.CardBody([
-                            dbc.Row(dbc.Card(dbc.CardBody([selector_date_flow, selector_type, selector_region, selector_typepro, selector_typesup], className="row row-cols-auto mb-4"))),
+                            dbc.Row(dbc.Card(dbc.CardBody([selector_date_flow, selector_type, selector_region, selector_typepro, selector_typesup], className="row row-cols-auto mb-4 gap-3"))),
                             html.Br(),
                             dbc.Row(id='dash_tab_flows', align='center'),
                             html.Br(),
@@ -44,11 +44,11 @@ layout = html.Div([
 def store_data(start_date, end_date, typ, regionsel, typepro, typesup):
     begin = start_date
     end = end_date
-    condType = " " if typ is None or typ == "" else "and `Тип особи` == @typ"
-    condRegion = " " if regionsel is None or regionsel == "" or regionsel == [] else "and (`Регіон` in (@regionsel))"
-    condtypepro = " " if typepro is None or typepro == "" or typepro == [] else "and (`Тип програми` in (@typepro))"
-    condtypesup = " " if typesup is None or typesup == "" or typesup == [] else "and (`Назва програми` in (@typesup))"
-    filter_data = df_flows.query(f"(`Дата подачі заявки`>=@begin and `Дата подачі заявки`<=@end) {condType} {condRegion} {condtypepro} {condtypesup}")
+    condType = " " if typ is None or typ == "" else "and `LegalForm` == @typ"
+    condRegion = " " if regionsel is None or regionsel == "" or regionsel == [] else "and (`Region` in (@regionsel))"
+    condtypepro = " " if typepro is None or typepro == "" or typepro == [] else "and (`TypeProgram` in (@typepro))"
+    condtypesup = " " if typesup is None or typesup == "" or typesup == [] else "and (`NameProgram` in (@typesup))"
+    filter_data = df_flows.query(f"(`CreateAt`>=@begin and `CreateAt`<=@end) {condType} {condRegion} {condtypepro} {condtypesup}")
 
     return get_table(filter_data,'table-filtering-flows')
 

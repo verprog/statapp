@@ -20,7 +20,7 @@ selector_region = get_selector('region_selector', "Вибір регіонів",
 layout = html.Div([dbc.Card(
                             dbc.CardBody([
                                 dbc.Row(dbc.Card(dbc.CardBody([selector_period, selector_type, selector_region],
-                                                              className="row row-cols-auto mb-4"))),
+                                                              className="row row-cols-auto mb-4 gap-3"))),
                                 html.Br(),
                                 dbc.Row(id='dash_tab_map', align='center'),
                                 html.Br(),
@@ -42,9 +42,9 @@ layout = html.Div([dbc.Card(
 def store_data(start_date, end_date, typ, regionsel):
     begin = start_date
     end = end_date
-    condType = " " if typ is None or typ == "" else "and `Тип особи` in (@typ)"
-    condRegion = " " if regionsel is None or regionsel == "" or regionsel == [] else "and Регіон in (@regionsel)"
-    filter_data = dfu.query(f"(`Дата реєстрації`>=@begin and `Дата реєстрації`<=@end) {condType} {condRegion}")
+    condType = " " if typ is None or typ == "" else "and `legalform` in (@typ)"
+    condRegion = " " if regionsel is None or regionsel == "" or regionsel == [] else "and `region` in (@regionsel)"
+    filter_data = dfu.query(f"(`registrationdate`>=@begin and `registrationdate`<=@end) {condType} {condRegion}")
 
     return get_table(filter_data,'table-sorting-filtering')
 

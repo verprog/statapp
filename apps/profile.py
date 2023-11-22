@@ -22,7 +22,7 @@ selector_gender = get_selector('gender_selector_prof', "Стать", commonmodul
 layout = html.Div([
                 dbc.Card(
                         dbc.CardBody([
-                            dbc.Row(dbc.Card(dbc.CardBody([selector_period, selector_type, selector_region, selector_area, selector_gender, selector_kved], className="row row-cols-auto mb-4"))),
+                            dbc.Row(dbc.Card(dbc.CardBody([selector_period, selector_type, selector_region, selector_area, selector_gender, selector_kved], className="row row-cols-auto mb-4 gap-3"))),
                             html.Br(),
                             dbc.Row(id='dash_tab_prof', align='center'),
                             html.Br(),
@@ -43,13 +43,13 @@ layout = html.Div([
            Input('region_selector_prof', 'value')],
           )
 def store_data(start_date, end_date, typ, area, gender, regionsel):
-    print(regionsel)
     begin, end = start_date, end_date
-    condArea = " " if area is None or area == "" else "and (`Площа, га.`>=@rangeStr and `Площа, га.`<@rangeEnd)"
-    condGen = " " if gender is None or gender == "" or gender == '-1' else "and `Стать` in (@gender)"
-    condType = " " if typ is None or typ == "" else "and `Тип особи` in (@typ)"
-    condRegion = " " if regionsel is None or regionsel == "" or regionsel == [] else "and `Регіон` in (@regionsel)"
-    filter_data = df_prof.query(f"(`Дата реєстрації`>=@begin and `Дата реєстрації`<=@end) {condType} {condRegion} {condArea} {condGen}")
+    areaunit = get_rangearea(area)
+    condArea = " " if area is None or area == "" else "and (`Group1LandParcelArea`>=@areaunit['start'] and `Group1LandParcelArea`<@areaunit['end'])"
+    condGen = " " if gender is None or gender == "" or gender == '-1' else "and `Gender` in (@gender)"
+    condType = " " if typ is None or typ == "" else "and `LegalForm` in (@typ)"
+    condRegion = " " if regionsel is None or regionsel == "" or regionsel == [] else "and `Region` in (@regionsel)"
+    filter_data = df_prof.query(f"(`RegistrationDate`>=@begin and `RegistrationDate`<=@end) {condType} {condRegion} {condArea} {condGen}")
 
     return get_table(filter_data,'table-filtering-prof')
 

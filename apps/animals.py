@@ -20,7 +20,7 @@ selector_gender = get_selector('genderanimal_selector_animal', "Стать", com
 layout = html.Div([
                 dbc.Card(
                         dbc.CardBody([
-                            dbc.Row(dbc.Card(dbc.CardBody([selector_type, selector_region, selector_animal, selector_gender], className="row row-cols-auto mb-4"))),
+                            dbc.Row(dbc.Card(dbc.CardBody([selector_type, selector_region, selector_animal, selector_gender], className="row row-cols-auto mb-4 gap-3"))),
                             html.Br(),
                             dbc.Row(id='dash_tab_animal', align='center'),
                             html.Br(),
@@ -39,11 +39,11 @@ layout = html.Div([
            Input('genderanimal_selector_animal', 'value')],
           )
 def store_data(typ, regionsel, animal, gender):
-    condType = " " if typ is None or typ == "" else "and `Тип особи` == @typ"
-    condRegion = " " if regionsel is None or regionsel == "" or regionsel == [] else "and (`Регіон` in (@regionsel))"
-    condanimal = " " if animal is None or animal == "" or animal == [] else "and (`Вид тварини` in (@animal))"
-    condgender = " " if gender is None or gender == "" or gender == [] else "and (`Стать` in (@gender))"
-    filter_data = df_animal.query(f"(`Тип особи` !=-1) {condType} {condRegion} {condanimal} {condgender}")
+    condType = " " if typ is None or typ == "" else "and `LegalForm` == @typ"
+    condRegion = " " if regionsel is None or regionsel == "" or regionsel == [] else "and (`Region` in (@regionsel))"
+    condanimal = " " if animal is None or animal == "" or animal == [] else "and (`Name` in (@animal))"
+    condgender = " " if gender is None or gender == "" or gender == [] else "and (`AnimalGender` in (@gender))"
+    filter_data = df_animal.query(f"(`LegalForm` !=-1) {condType} {condRegion} {condanimal} {condgender}")
 
     return get_table(filter_data,'table-filtering-animal')
 

@@ -20,7 +20,7 @@ selector_typesup = get_selector('typesup_selector_profile', "Назва прог
 layout = html.Div([
                 dbc.Card(
                         dbc.CardBody([
-                            dbc.Row(dbc.Card(dbc.CardBody([selector_date_flow, selector_provider, selector_typepro, selector_typesup], className="row row-cols-auto mb-4"))),
+                            dbc.Row(dbc.Card(dbc.CardBody([selector_date_flow, selector_provider, selector_typepro, selector_typesup], className="row row-cols-auto mb-4 gap-3"))),
                             html.Br(),
                             dbc.Row(id='dash_tab_profile', align='center'),
                             html.Br(),
@@ -29,7 +29,8 @@ layout = html.Div([
                                      dcc.Download(id="download-xlsx-profile")], width=2)], align='center'),
                         ]), color='light'
                     )
-                ])
+                ]
+                )
 
 
 @callback(Output('dash_tab_profile', 'children'),
@@ -42,10 +43,10 @@ layout = html.Div([
 def store_data(start_date, end_date, provider, typepro, typesup):
     begin = start_date
     end = end_date
-    condprovider = " " if provider is None or provider == "" or provider == [] else "and (`Надавач підтримки` in (@provider))"
-    condtypepro = " " if typepro is None or typepro == "" or typepro == [] else "and (`Тип програми` in (@typepro))"
-    condtypesup = " " if typesup is None or typesup == "" or typesup == [] else "and (`Назва програми` in (@typesup))"
-    filter_data = df_profile.query(f"(`Дата подачі заявки`>=@begin and `Дата подачі заявки`<=@end) {condprovider} {condtypepro} {condtypesup}")
+    condprovider = " " if provider is None or provider == "" or provider == [] else "and (`organization` in (@provider))"
+    condtypepro = " " if typepro is None or typepro == "" or typepro == [] else "and (`TypeProgram` in (@typepro))"
+    condtypesup = " " if typesup is None or typesup == "" or typesup == [] else "and (`NameProgram` in (@typesup))"
+    filter_data = df_profile.query(f"(`CreateAt`>=@begin and `CreateAt`<=@end) {condprovider} {condtypepro} {condtypesup}")
 
     return get_table(filter_data,'table-filtering-profile')
 

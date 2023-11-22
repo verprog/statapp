@@ -9,16 +9,21 @@ import plotly.offline as plot
 import plotly.graph_objects as go
 import pandas as pd
 import numpy as np
-from dash import Dash, dcc, html, Output, Input, State, callback, no_update, dash_table
+from dash import Dash, dcc, html, Output, Input, State, callback, no_update, dash_table, dash
 import dash_ag_grid as dag
 import dash_mantine_components as dmc
 from dash.dash_table.Format import Format, Scheme, Trim
 import datetime
 
 
+
+
 # pd.options.display.float_format = '{:,.2f}'.format
 
-
+def get_app_assets(name):
+    res = f"/assets/{name}"
+    print(res)
+    return res
 now = datetime.datetime.now()
 last_day = (now - datetime.timedelta(1))
 
@@ -39,112 +44,65 @@ df_animal = pd.read_csv(csv_file_animal)
 df_prog = pd.read_csv(csv_file_prog)
 df_profile = pd.read_csv(csv_file_recip)
 
-
-# using dictionary to convert specific columns
-convert_dict_map = {
-                    'region': str,
-                    'legalform': str,
-                    'area': int,
-                    'animal': float,
-                    'giftamount': int,
-                    'cntuser': float,
-                    }
-convert_dict_prof = {
-                    'Region': str,
-                    'LegalForm': str,
-                    'Group1LandParcelArea': int,
-                    'Gender': str,
-                    'KindName': str,
-                    }
-convert_dict_land = {
-                    'Region': str,
-                    'LegalForm': str,
-                    'PropRight': str,
-                    'Purpose': str,
-                    'Area': float,
-                    'Subject': int,
-                    }
-dfu = dfu.astype(convert_dict_map)
-df_prof = df_prof.astype(convert_dict_prof)
-df_land = df_land.astype(convert_dict_land)
-dfu.rename(columns={'registrationdate': 'Дата реєстрації',
-                            'region': 'Регіон',
-                            'legalform': 'Тип особи',
-                            'area': 'Площа, га.',
-                            'animal': 'Кіл-сть тварин',
-                            'giftamount': 'Надано підтримки, грн',
-                            'cntuser': 'Кількість користувачів',}, inplace=True)
-
-df_prof.rename(columns={'RegistrationDate': 'Дата реєстрації',
-                            'KindName': 'КВЕД',
-                            'Id': 'Користувач',
-                            'Region': 'Регіон',
-                            'LegalForm': 'Тип особи',
-                            'Gender': 'Стать',
-                            'Group1LandParcelArea': 'Площа, га.',}, inplace=True)
-
-df_land.rename(columns={'PropRight': 'Тип речового права',
-                            'Purpose': 'КВЕД',
-                            'Region': 'Регіон',
-                            'LegalForm': 'Тип особи',
-                            'Area': 'Площа, га.',
-                            'Subject': "Суб'єкти",}, inplace=True)
-
-df_animal.rename(columns={ 'LegalForm': 'Тип особи',
-                            'Region': 'Регіон',
-                            'Name': 'Вид тварини',
-                            'SexName': 'Назва',
-                            'AnimalGender': 'Стать',
-                            'animal': "Кіл-ть",}, inplace=True)
-
-df_prog.rename(columns={ 'CreateAt': 'Дата подачі заявки',
-                            'LegalForm': 'Тип особи',
-                            'Region': 'Регіон',
-                            'TypeProgram': 'Тип програми',
-                            'NameProgram': 'Назва програми',
-                            'organization': 'Надавач підтримки',
-                            'TotalAmount': 'Бюджет програми',
-                            'DesiredAmount': 'Запросили суму',
-                            'ProvidedAmount': 'Отримана сума',
-                            'LandParcelCount': 'Площа землі у заявці',
-                            'AnimalCount': 'Кількість тварин у заявці',}, inplace=True)
+formatnum0 = dict(specifier=',.2f', locale=dict(separate_4digits=False))
+formatnum2 = dict(specifier=',.2f', locale=dict(separate_4digits=False))
+columnsdict=\
+[dict(id='registrationdate', name='Дата реєстрації'),
+dict(id='RegistrationDate', name='Дата реєстрації'),
+dict(id='region', name='Регіон'),
+dict(id='Region', name='Регіон'),
+dict(id='legalform', name='Тип особи'),
+dict(id='LegalForm', name='Тип особи'),
+dict(id='area', name='Площа, га.', type='numeric', format=formatnum2),
+dict(id='Area', name='Загальна площа землі', type='numeric', format=formatnum2),
+dict(id='animal', name='Кіл-сть тварин', type='numeric', format=formatnum0),
+dict(id='Animal', name='Кіл-сть тварин', type='numeric', format=formatnum0),
+dict(id='giftamount', name='Надано підтримки, грн', type='numeric', format=formatnum2),
+dict(id='cntuser', name='Кількість користувачів', type='numeric', format=formatnum0),
+dict(id='KindName', name='КВЕД'),
+dict(id='Id', name='Користувач'),
+dict(id='Gender', name='Стать'),
+dict(id='Group1LandParcelArea', name='Площа, га.', type='numeric', format=formatnum2),
+dict(id='PropRight', name='Тип речового права'),
+dict(id='Purpose', name='КВЕД'),
+dict(id='Subject', name='Субєкти', type='numeric', format=formatnum0),
+dict(id='Name', name='Вид тварини'),
+dict(id='SexName', name='Назва'),
+dict(id='AnimalGender', name='Стать'),
+dict(id='CreateAt', name='Дата подачі заявки'),
+dict(id='TypeProgram', name='Тип програми'),
+dict(id='NameProgram', name='Назва програми'),
+dict(id='organization', name='Надавач підтримки'),
+dict(id='TotalAmount', name='Бюджет програми', type='numeric', format=formatnum2),
+dict(id='DesiredAmount', name='Запросили суму', type='numeric', format=formatnum2),
+dict(id='ProvidedAmount', name='Отримана сума', type='numeric', format=formatnum2),
+dict(id='LandParcelCount', name='Площа землі у заявці', type='numeric', format=formatnum2),
+dict(id='AnimalCount', name='Кількість тварин у заявці', type='numeric', format=formatnum0),
+dict(id='District', name='Район'),
+dict(id='QuantityAnimal', name='Загальна кількість тварин', type='numeric', format=formatnum0),
+]
 
 df_profile[['NameProgram','TypeProgram','LegalForm','Id','Region','District','CreateAt',
 'organization','DesiredAmount','ProvidedAmount','Area','LandParcelCount','QuantityAnimal','AnimalCount']]
-df_profile.rename(columns={'NameProgram': 'Назва програми',
-                        'TypeProgram': 'Тип програми',
-                        'LegalForm': 'Тип особи',
-                        'Id': "Користувач",
-                        'Region': 'Регіон',
-                        'District': 'Район',
-                        'CreateAt': 'Дата подачі заявки',
-                        'organization': 'Надавач підтримки',
-                        'DesiredAmount': 'Запросили суму',
-                        'ProvidedAmount': 'Отримана сума',
-                        'Area': "Загальна площа землі",
-                        'LandParcelCount': 'Площа землі у заявці',
-                        'QuantityAnimal': "Загальна кількість тварин",
-                        'AnimalCount': 'Кількість тварин у заявці',}, inplace=True)
 
+df_prof = df_prof[['RegistrationDate','LegalForm', 'Region', 'Id', 'Gender', 'KindName', 'Group1LandParcelArea']]
 
-df_prof = df_prof[['Дата реєстрації','Стать', 'Користувач', 'Тип особи', 'Регіон', 'КВЕД', 'Площа, га.']]
-
-mapData = dfu[['Площа, га.', 'Кіл-сть тварин', 'Надано підтримки, грн', 'Кількість користувачів']]
+mapData = dfu[['area', 'animal', 'giftamount', 'cntuser']]
 mapIndicator = pd.DataFrame(mapData.sum(axis=0, skipna=True)).reset_index()
 mapIndicator.rename(columns={'index': 'DATA', 0: 'VALUE'}, inplace=True)
 
-typelst = [x for x in dfu['Тип особи'].sort_values().unique()]
-regionlst = [x.upper() for x in dfu['Регіон'].sort_values().unique()]
-kvedlst = [x for x in df_prof['КВЕД'].sort_values().unique()]
-kvedlandlst = [x for x in df_land['КВЕД'].sort_values().unique()]
-rightlst = [x for x in df_land['Тип речового права'].sort_values().unique()]
-animallst = [x for x in df_animal['Вид тварини'].sort_values().unique()]
-genderanimallst = [x for x in df_animal['Стать'].sort_values().unique()]
-typeprolst = [x for x in df_prog['Тип програми'].sort_values().unique()]
-typesuplst = [x for x in df_prog['Назва програми'].sort_values().unique()]
-typeprolstp = [x for x in df_profile['Тип програми'].sort_values().unique()]
-typesuplstp = [x for x in df_profile['Назва програми'].sort_values().unique()]
-providerstp = [x for x in df_profile['Надавач підтримки'].sort_values().unique()]
+typelst = [x for x in dfu['legalform'].sort_values().unique()]
+regionlst = [x.upper() for x in dfu['region'].sort_values().unique()]
+kvedlst = [x for x in df_prof['KindName'].sort_values().unique()]
+kvedlandlst = [x for x in df_land['Purpose'].sort_values().unique()]
+rightlst = [x for x in df_land['PropRight'].sort_values().unique()]
+animallst = [x for x in df_animal['Name'].sort_values().unique()]
+genderanimallst = [x for x in df_animal['AnimalGender'].sort_values().unique()]
+typeprolst = [x for x in df_prog['TypeProgram'].sort_values().unique()]
+typesuplst = [x for x in df_prog['NameProgram'].sort_values().unique()]
+typeprolstp = [x for x in df_profile['TypeProgram'].sort_values().unique()]
+typesuplstp = [x for x in df_profile['NameProgram'].sort_values().unique()]
+providerstp = [x for x in df_profile['organization'].sort_values().unique()]
 
 arealst =[
            {'label': 'Всі дані', 'value': -1},
@@ -168,9 +126,10 @@ def get_selector(idname, plholder, optionvalue,clerablebool, multibool):
             options=optionvalue,
             value='',
             clearable=clerablebool,
-            multi=multibool
+            multi=multibool,
+            className='data-bs-offset'
         )
-    ], style={'min-width': '20em', 'padding-top': '3px'})
+    ], style={'min-width': '20em'}) #, 'padding-top': '3px'
     return selector
 
 def get_datepicker(idname):
@@ -189,20 +148,36 @@ def get_datepicker(idname):
     return datepicker_period
 
 
-def get_table(dataframe, idname):
+def get_table(data, idname):
+    from dash import Dash
+    from dash.html import Br, Div
+    from dash.dash_table import DataTable
+    from dash.dash_table.Format import Format, Group, Prefix, Scheme, Symbol
     format_table = dict(page_current=0,
                         page_size=20,
                         sort_action='native',
                         style_table={'overflowX': 'auto'},
-                        # style_cell={'textAlign': 'left'},
                         style_header={'border': '1px solid black', 'textAlign': 'center', 'fontWeight': 'bold'},
+                        style_cell={
+                            # "minWidth": "180px",
+                            # "width": "180px",
+                            "maxWidth": "180px",
+                            "overflow": "hidden",
+                            "textOverflow": "ellipsis",
+                            'textAlign': 'left',
+                            # "maxWidth": 0
+                            'font_family': 'e-Ukraine',
+                            'font_size': '14px',
+                        },
+                        # {'textAlign': 'left'},
+
                         style_data_conditional=[
-                            {
-                                'if': {
-                                    'column_type': 'text'  # 'text' | 'any' | 'datetime' | 'numeric'
-                                },
-                                'textAlign': 'left'
-                            },
+                            # {
+                            #     'if': {
+                            #         'column_type': 'text'  # 'text' | 'any' | 'datetime' | 'numeric'
+                            #     },
+                            #     'textAlign': 'left'
+                            # },
                             {
                                 'if': {
                                     'column_type': 'numeric'  # 'text' | 'any' | 'datetime' | 'numeric'
@@ -220,9 +195,13 @@ def get_table(dataframe, idname):
                             }
                         ]
                         )
-    data = dataframe.to_dict('records')
-    columns = [{"name": i, "id": i, } for i in dataframe.columns]
-    return dash_table.DataTable(data=data, columns=columns, id=idname, **format_table)
+    ls = data.columns
+    lstcolumns = []
+    for i in columnsdict:
+        if i['id'] in ls:
+            lstcolumns.append(i)
+
+    return DataTable(fill_width=True, columns=lstcolumns, data=data.to_dict('records'), id=idname, **format_table)
 
 def get_header():
     # navbar = html.Div([
@@ -523,26 +502,88 @@ def get_rangearea(num=-1):
     d['end'] = area_end
     return d
 
+def get_selector2(idname, plholder, optionvalue,clerablebool, multibool):
+    selector = dbc.DropdownMenu(children=[
+                                    dcc.Checklist(
+                                        options={
+                                            '-1': 'Вібрати все',
+                                            '0': ' Очистити',
+                                        },
+                                        value='',
+                                        inline=True,
+                                        className='gap-3',
+                                        id=f'{idname}_all'),
+                                    dmc.Space(h=30),
+                                    dcc.Checklist(
+                                        options=optionvalue,
+                                        value='',
+                                        className='gap-3',
+                                        id=idname
+                                    ),
+                                ],
+                                label=plholder,
 
-dbc.DropdownMenu(
-    children=[
-        dcc.Checklist(
-            options={
-                '-1': 'Вібрати все',
-                '0': ' Очистити',
-            },
-            value='',
-            inline=True
+                            )
+    return selector
+
+
+
+# Footer section
+def get_footer():
+    footer = html.Footer(
+        dbc.Container(
+            [
+                dbc.Row([dbc.Col([
+                                    dbc.Row(html.H1(children=['Створено за підтримки:'], className='h3')),
+                                    dbc.Row(html.Img(src=get_app_assets('62f4e23dfe7a4e5f2534ec18_EU_logo_white.png')
+                                                     ,style={'max-width': '20%',
+                                                      'vertical-align': 'middle',
+                                                      'display': 'inline-block',}
+                                                     )
+                                            )
+                                    ],
+                                        style={'margin-top': 30},
+                                        width=6,
+                                        className='d-flex justify-content-start vstack gap-3'),
+
+                                dbc.Col(['ONE RIGHT'], width=6,
+                                        className='d-flex justify-content-end vstack gap-3')
+                                ], className='d-flex',
+                style={'height': '400px', "color": "white"}),
+
+
+                dbc.Row([
+                            dbc.Col([html.Img(src=get_app_assets('trident.png')),
+                                     html.H1(children=['Міністерство аграрної політики та продовольства України'], style={'margin-left': '20'}, className='h5'),
+                                     dmc.Divider(orientation="vertical", style={"height": 70}),
+                                     html.H1(children=['Міністерство аграрної політики та продовольства України'], style={'margin-left': '20'}, className='h5'),
+
+                                     ], width=8, className='d-flex justify-content-start'),
+                            dbc.Col(['TWO RIGHT'], width=4, className='d-flex justify-content-end')],
+                            style={'height': '100px', 'padding': '10px', "color": "white"}, className='d-flex'
+                        ),
+                dbc.Row([html.P("© 2023 All rights reserved."), html.P("Contact us at: shenenko.av@gmail.com"), ],
+                        # style={'color': 'white', 'padding': '10px', 'position': 'fixed', 'bottom': '0'},
+                        style={'height': '25px', "color": "white"}, className='d-flex'
+                        )
+            ]
         ),
-        dmc.Space(h=30),
-        dcc.Checklist(
-            options={
-                'NYC': 'New York City',
-                'MTL': 'Montreal',
-                'SF': 'San Francisco'
-            },
-            value=['MTL']
-        ),
-    ],
-    label="menu",
-),
+        className='d-flex ', #fixed-bottom mt-auto position-sticky top-100
+        style={
+            'max-width': 'none',
+            'padding-left': '4vw',
+            'padding-right': '4vw',
+            'display': 'block',
+            'height': '525px',  # Set the fixed height of the footer here */
+            # 'line-height': '60px', # Vertically center the text there */
+            'background-color': 'black',
+
+            'border-top-style': 'double',
+            'border-top-color': '#1866B9',
+            'margin-left': 'auto',
+            'margin-right': 'auto',
+            'margin-top': 15
+            , }
+
+    )
+    return footer

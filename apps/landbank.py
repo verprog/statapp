@@ -20,7 +20,7 @@ selector_right = get_selector('right_selector_land', "Тип речового п
 layout = html.Div([
                 dbc.Card(
                         dbc.CardBody([
-                            dbc.Row(dbc.Card(dbc.CardBody([selector_type, selector_region, selector_right, selector_kved], className="row row-cols-auto mb-4"))),
+                            dbc.Row(dbc.Card(dbc.CardBody([selector_type, selector_region, selector_right, selector_kved], className="row row-cols-auto mb-4 gap-3"))),
                             html.Br(),
                             dbc.Row(id='dash_tab_land', align='center'),
                             html.Br(),
@@ -39,11 +39,11 @@ layout = html.Div([
            Input('kved_selector_land', 'value')],
           )
 def store_data(typ, regionsel, right, kved):
-    condType = " " if typ is None or typ == "" else "and `Тип особи` == @typ"
-    condRegion = " " if regionsel is None or regionsel == "" or regionsel == [] else "and (`Регіон` in (@regionsel))"
-    condright = " " if right is None or right == "" or right == [] else "and (`Тип речового права` in (@right))"
-    condkved = " " if kved is None or kved == "" or kved == [] else "and (`КВЕД` in (@kved))"
-    filter_data = df_land.query(f"(`Тип особи` !=-1) {condType} {condRegion} {condright} {condkved}")
+    condType = " " if typ is None or typ == "" else "and `LegalForm` == @typ"
+    condRegion = " " if regionsel is None or regionsel == "" or regionsel == [] else "and (`Region` in (@regionsel))"
+    condright = " " if right is None or right == "" or right == [] else "and (`PropRight` in (@right))"
+    condkved = " " if kved is None or kved == "" or kved == [] else "and (`Purpose` in (@kved))"
+    filter_data = df_land.query(f"(`LegalForm` !=-1) {condType} {condRegion} {condright} {condkved}")
     return get_table(filter_data,'table-filtering-land')
 
 

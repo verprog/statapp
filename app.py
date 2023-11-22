@@ -1,7 +1,7 @@
 import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, State, dcc, html, callback
-from apps import landbank, animals, supportflows, recipients, home, baseresult, userprofile,  commonmodules
+from apps import landbank, animals, supportflows, recipients, home, baseresult, profile,  commonmodules
 
 app = dash.Dash(assets_folder='assets',
     # external_stylesheets=[dbc.themes.BOOTSTRAP],
@@ -12,15 +12,20 @@ app = dash.Dash(assets_folder='assets',
     suppress_callback_exceptions=True
 )
 app._favicon = 'assets/favicon.ico'
+
 server = app.server
 
 # app.config.suppress_callback_exceptions = True
 navbar = commonmodules.get_header()
 sidebar = commonmodules.get_sidebar2()
+footer = commonmodules.get_footer()
 
 content = html.Div(id="page-content")
 
-app.layout = html.Div([dcc.Location(id="url"), navbar, sidebar, content])
+app.layout = html.Div([dcc.Location(id="url"), navbar, sidebar, content, footer],
+                      style={'background-color': '#e7f5f5',
+                             "height": "100vh"}
+                      )
 
 
 @app.callback(
@@ -32,7 +37,7 @@ def render_page_content(pathname):
     if pathname == "/base":
         return baseresult.layout, f"{nm} - Основні результати"
     elif pathname == "/profile":
-        return userprofile.layout, f"{nm} - Профіль користувача"
+        return profile.layout, f"{nm} - Профіль користувача"
     elif pathname == "/land":
         return landbank.layout, f"{nm} - Земельний банк"
     elif pathname == "/animals":
