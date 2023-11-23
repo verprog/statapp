@@ -22,8 +22,8 @@ import datetime
 
 def get_app_assets(name):
     res = f"/assets/{name}"
-    print(res)
     return res
+
 now = datetime.datetime.now()
 last_day = (now - datetime.timedelta(1))
 
@@ -86,8 +86,12 @@ df_profile[['NameProgram','TypeProgram','LegalForm','Id','Region','District','Cr
 'organization','DesiredAmount','ProvidedAmount','Area','LandParcelCount','QuantityAnimal','AnimalCount']]
 
 df_prof = df_prof[['RegistrationDate','LegalForm', 'Region', 'Id', 'Gender', 'KindName', 'Group1LandParcelArea']]
+mapcolumn = {'area': 'Площа, га.', 'animal': 'Кількість тварин', 'giftamount': 'Надано підтримки, грн',
+               'cntuser': 'Кількість кадастрових номерів'}
 
 mapData = dfu[['area', 'animal', 'giftamount', 'cntuser']]
+mapData.rename(columns=mapcolumn, inplace=True)
+
 mapIndicator = pd.DataFrame(mapData.sum(axis=0, skipna=True)).reset_index()
 mapIndicator.rename(columns={'index': 'DATA', 0: 'VALUE'}, inplace=True)
 
@@ -534,41 +538,65 @@ def get_footer():
         dbc.Container(
             [
                 dbc.Row([dbc.Col([
-                                    dbc.Row(html.H1(children=['Створено за підтримки:'], className='h3')),
-                                    dbc.Row(html.Img(src=get_app_assets('62f4e23dfe7a4e5f2534ec18_EU_logo_white.png')
-                                                     ,style={'max-width': '20%',
-                                                      'vertical-align': 'middle',
-                                                      'display': 'inline-block',}
-                                                     )
-                                            )
-                                    ],
-                                        style={'margin-top': 30},
-                                        width=6,
-                                        className='d-flex justify-content-start vstack gap-3'),
+                    dbc.Row(html.H1(children=['Створено за підтримки:'], className='h3')),
+                    dbc.Row(html.Img(src=get_app_assets('62f4e23dfe7a4e5f2534ec18_EU_logo_white.png')
+                                     , style={'max-width': '18%',
+                                              'vertical-align': 'middle',
+                                              'display': 'inline-block', }
+                                     )
+                            )
+                ],
+                    style={'margin-top': 30},
+                    width=6,
+                    className='d-flex justify-content-start vstack gap-3'),
 
-                                dbc.Col(['ONE RIGHT'], width=6,
-                                        className='d-flex justify-content-end vstack gap-3')
-                                ], className='d-flex',
-                style={'height': '400px', "color": "white"}),
-
+                    dbc.Col([html.H1(children=['З питань роботи у ДАР звертайтесь до контакт-центру'],
+                                     className='h5 text-muted'),
+                             html.A("(044) 339-92-15", href="tel:+380443399215", target='_blank',
+                                    style={"color": "white"}),
+                             html.P([
+                                 html.A("(044) 224-59-33", href="tel:+380442245933",
+                                        target='_blank', className="order-1 align-items-end text-white"),
+                                 html.A(' , '),
+                                 html.A("support@dar.gov.ua", href="mailto:support@dar.gov.ua",
+                                        target='_blank', style={"color": "white"},
+                                        className="order-2 align-items-end text-white"),
+                             ]
+                             )],
+                            style={'margin-top': 30},
+                            width=6,
+                            className='d-flex align-items-end flex-column  gap-3')
+                ], className='d-flex',
+                    style={'height': '400px', "color": "white"}),
 
                 dbc.Row([
-                            dbc.Col([html.Img(src=get_app_assets('trident.png')),
-                                     html.H1(children=['Міністерство аграрної політики та продовольства України'], style={'margin-left': '20'}, className='h5'),
-                                     dmc.Divider(orientation="vertical", style={"height": 70}),
-                                     html.H1(children=['Міністерство аграрної політики та продовольства України'], style={'margin-left': '20'}, className='h5'),
+                    dbc.Col([html.Img(src=get_app_assets('trident.png')),
+                             html.H1(children=['Міністерство аграрної політики та продовольства України'],
+                                     style={'margin-left': '20', 'padding-left': '10px'}, className='h5'),
+                             dmc.Divider(orientation="vertical", style={"height": 70}),
+                             html.H1(children=['Державний аграрний реєстр 2023. Всі права захищені'],
+                                     style={'padding-left': '10px'}, className='h5'),
 
-                                     ], width=8, className='d-flex justify-content-start'),
-                            dbc.Col(['TWO RIGHT'], width=4, className='d-flex justify-content-end')],
-                            style={'height': '100px', 'padding': '10px', "color": "white"}, className='d-flex'
-                        ),
-                dbc.Row([html.P("© 2023 All rights reserved."), html.P("Contact us at: shenenko.av@gmail.com"), ],
-                        # style={'color': 'white', 'padding': '10px', 'position': 'fixed', 'bottom': '0'},
-                        style={'height': '25px', "color": "white"}, className='d-flex'
-                        )
+                             ], width=8, className='d-flex justify-content-start'),
+
+                    dbc.Col([html.Img(src=get_app_assets('DiaLogo_02.png'), style={'max-width': '18%'}),
+                             html.H1(
+                                 children=['Створено з використанням дизайну Дія diia.gov.ua 2023. Всі права захищені'],
+                                 style={'padding-left': '10px'}, className='h5'),
+                             ],
+                            width=4,
+                            className='d-flex justify-content-end')],
+
+                    style={'height': '100px', 'padding': '10px', "color": "white"}, className='d-flex border-top'
+                ),
+                dbc.Row(html.P([html.A("© 2023 All rights reserved. Contact us at: ", className='text-white-50'),
+                                html.A("shenenko.av@gmail.com", href="mailto:shenenko.av@gmail.com", target='_blank',
+                                       className='text-white-50'), ]),
+                        style={'width': '100%','height': '25px', "color": "white"},
+                        className='d-inline-flex align-self-center text-white-50')
             ]
         ),
-        className='d-flex ', #fixed-bottom mt-auto position-sticky top-100
+        className='d-flex ',  # fixed-bottom mt-auto position-sticky top-100
         style={
             'max-width': 'none',
             'padding-left': '4vw',
