@@ -1,25 +1,109 @@
 
-
-
-
-"btn_sign js-btn_sign"
-.btn_register, .btn_sign, .btn_sign-auth {
-  margin: 0;
-    margin-left: 0px;
-  padding: 12px 20px;
-  border-radius: 40px;
-  font-family: "e-ukraine",sans-serif;
-  font-size: 13px;
-  color: #fff;
-  font-weight: 400;
-  line-height: 16px;
+@font-face {
+  font-family: 'e-ukraine';
+  src: url('fonts/e-Ukraine_font/web/e-Ukraine-Light.eot'); /* Поддерживается в IE9 */
+  src: local("O"), url('fonts/e-Ukraine_font/web/e-Ukraine-Light.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('fonts/e-Ukraine_font/web/e-Ukraine-Light.woff2') format('woff2'), /* Для супер современных браузеров */
+       url('fonts/e-Ukraine_font/web/e-Ukraine-Light.woff') format('woff'), /* Для супер современных браузеров */
+       url('fonts/e-Ukraine_font/web/e-Ukraine-Light.ttf')  format('truetype'), /* Для Сафари, Андроид, iOS и почти всех других */
+       url('fonts/e-Ukraine_font/web/e-Ukraine-Light.svg#svgFontName') format('svg'); /* Для iOS */
+  font-weight: 300;
+  font-style: lite; 
 }
-@media (min-width: 768px) {
-  .btn-fill, .btn_sign, .btn_sign-auth, .btn_more-news, .btn_send {
-    transition: 0.2s ease-in-out;
-    background-image: linear-gradient(217deg, rgba(255,0,0,0.8), rgba(255,0,0,0) 70.71%),linear-gradient(127deg, rgba(0,0,255,0.8), rgba(0,0,255,0) 70.71%),linear-gradient(336deg, rgba(0,255,0,0.8), rgba(0,255,0,0) 70.71%);
-    background-size: 200% 300%;
-    -webkit-animation: 10s infinite granimate;
-    animation: 10s infinite granimate;
-  }
+
+@font-face {
+  font-family: 'e-ukraine';
+  src: url('fonts/e-Ukraine_font/web/e-Ukraine-Regular.eot'); /* Поддерживается в IE9 */
+  src: local("O"), url('fonts/e-Ukraine_font/web/e-Ukraine-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('fonts/e-Ukraine_font/web/e-Ukraine-Regular.woff2') format('woff2'), /* Для супер современных браузеров */
+       url('fonts/e-Ukraine_font/web/e-Ukraine-Regular.woff') format('woff'), /* Для супер современных браузеров */
+       url('fonts/e-Ukraine_font/web/e-Ukraine-Regular.ttf')  format('truetype'), /* Для Сафари, Андроид, iOS и почти всех других */
+       url('fonts/e-Ukraine_font/web/e-Ukraine-Regular.svg#svgFontName') format('svg'); /* Для iOS */
+  font-weight: 400;
+  font-style: normal; 
+}
+
+@font-face {
+  font-family: 'e-ukraine';
+  src: url('fonts/e-Ukraine_font/web/e-Ukraine-Medium.eot'); /* Поддерживается в IE9 */
+  src: local("O"), url('fonts/e-Ukraine_font/web/e-Ukraine-Medium.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('fonts/e-Ukraine_font/web/e-Ukraine-Medium.woff2') format('woff2'), /* Для супер современных браузеров */
+       url('fonts/e-Ukraine_font/web/e-Ukraine-Medium.woff') format('woff'), /* Для супер современных браузеров */
+       url('fonts/e-Ukraine_font/web/e-Ukraine-Medium.ttf')  format('truetype'), /* Для Сафари, Андроид, iOS и почти всех других */
+       url('fonts/e-Ukraine_font/web/e-Ukraine-Medium.svg#svgFontName') format('svg'); /* Для iOS */
+  font-weight: 500;
+  font-style: medium; 
+}
+
+@font-face {
+  font-family: 'e-ukraine';
+  src: url('fonts/e-Ukraine_font/web/e-Ukraine-Bold.eot'); /* Поддерживается в IE9 */
+  src: local("O"), url('fonts/e-Ukraine_font/web/e-Ukraine-Bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('fonts/e-Ukraine_font/web/e-Ukraine-Bold.woff2') format('woff2'), /* Для супер современных браузеров */
+       url('fonts/e-Ukraine_font/web/e-Ukraine-Bold.woff') format('woff'), /* Для супер современных браузеров */
+       url('fonts/e-Ukraine_font/web/e-Ukraine-Bold.ttf')  format('truetype'), /* Для Сафари, Андроид, iOS и почти всех других */
+       url('fonts/e-Ukraine_font/web/e-Ukraine-Bold.svg#svgFontName') format('svg'); /* Для iOS */
+  font-weight: 700;
+  font-style: bold; 
+}
+
+
+@font-face {
+  font-family: 'e-ukraine-heading';
+  src: url('fonts/e-Ukraine_font/web/e-UkraineHead-Light.eot'); /* Поддерживается в IE9 */
+  src: local("O"), url('fonts/e-Ukraine_font/web/e-UkraineHead-Light.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('fonts/e-Ukraine_font/web/e-UkraineHead-Light.woff2') format('woff2'), /* Для супер современных браузеров */
+       url('fonts/e-Ukraine_font/web/e-UkraineHead-Light.woff') format('woff'), /* Для супер современных браузеров */
+       url('fonts/e-Ukraine_font/web/e-UkraineHead-Light.ttf')  format('truetype'), /* Для Сафари, Андроид, iOS и почти всех других */
+       url('fonts/e-Ukraine_font/web/e-UkraineHead-Light.svg#svgFontName') format('svg'); /* Для iOS */
+  font-weight: 300;
+  font-style: lite; 
+}
+
+@font-face {
+  font-family: 'e-ukraine-heading';
+  src: url('fonts/e-Ukraine_font/web/e-UkraineHead-Regular.eot'); /* Поддерживается в IE9 */
+  src: local("O"), url('fonts/e-Ukraine_font/web/e-UkraineHead-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('fonts/e-Ukraine_font/web/e-UkraineHead-Regular.woff2') format('woff2'), /* Для супер современных браузеров */
+       url('fonts/e-Ukraine_font/web/e-UkraineHead-Regular.woff') format('woff'), /* Для супер современных браузеров */
+       url('fonts/e-Ukraine_font/web/e-UkraineHead-Regular.ttf')  format('truetype'), /* Для Сафари, Андроид, iOS и почти всех других */
+       url('fonts/e-Ukraine_font/web/e-UkraineHead-Regular.svg#svgFontName') format('svg'); /* Для iOS */
+  font-weight: 400;
+  font-style: normal; 
+}
+
+@font-face {
+  font-family: 'e-ukraine-heading';
+  src: url('fonts/e-Ukraine_font/web/e-UkraineHead-Medium.eot'); /* Поддерживается в IE9 */
+  src: local("O"), url('fonts/e-Ukraine_font/web/e-UkraineHead-Medium.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('fonts/e-Ukraine_font/web/e-UkraineHead-Medium.woff2') format('woff2'), /* Для супер современных браузеров */
+       url('fonts/e-Ukraine_font/web/e-UkraineHead-Medium.woff') format('woff'), /* Для супер современных браузеров */
+       url('fonts/e-Ukraine_font/web/e-UkraineHead-Medium.ttf')  format('truetype'), /* Для Сафари, Андроид, iOS и почти всех других */
+       url('fonts/e-Ukraine_font/web/e-UkraineHead-Medium.svg#svgFontName') format('svg'); /* Для iOS */
+  font-weight: 500;
+  font-style: medium; 
+}
+
+@font-face {
+  font-family: 'e-ukraine-heading';
+  src: url('fonts/e-Ukraine_font/web/e-UkraineHead-Bold.eot'); /* Поддерживается в IE9 */
+  src: local("O"), url('fonts/e-Ukraine_font/web/e-UkraineHead-Bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('fonts/e-Ukraine_font/web/e-UkraineHead-Bold.woff2') format('woff2'), /* Для супер современных браузеров */
+       url('fonts/e-Ukraine_font/web/e-UkraineHead-Bold.woff') format('woff'), /* Для супер современных браузеров */
+       url('fonts/e-Ukraine_font/web/e-UkraineHead-Bold.ttf')  format('truetype'), /* Для Сафари, Андроид, iOS и почти всех других */
+       url('fonts/e-Ukraine_font/web/e-UkraineHead-Bold.svg#svgFontName') format('svg'); /* Для iOS */
+  font-weight: 700;
+  font-style: bold; 
+}
+
+
+.VirtualizedSelectOption {
+  overflow: hidden;
+  font-size: 12px;
+}
+
+/*.VirtualizedSelectOption { white-space: nowrap; overflow: scroll; text-overflow: ellipsis; }*/
+
+.DateInput_input, .DateInput_input_1 {
+  Height: 30px;
 }

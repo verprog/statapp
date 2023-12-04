@@ -151,7 +151,7 @@ def get_datepicker(idname):
                           start_date=last_day.replace(day=1).replace(month=1).date(),
                           end_date=last_day.date(),
                           display_format='DD.MM.YYYY',
-                            style={'max-height': '25px', 'padding-top': '3px'}
+                          style={'max-height': '25px', 'padding-top': '3px'}
                       )
     return datepicker_period
 
@@ -168,6 +168,7 @@ def get_table(data, idname):
                         style_header={"border": "1px solid black",
                                       "textAlign": "center",
                                       "font-family": "e-ukraine-heading",
+                                      "font-weight": "700",
                                       "backgroundColor": "#e7eef3",
                                       "border": "1px solid #e7eef3"},#, 'fontWeight': 'bold'
                         style_cell={
@@ -222,25 +223,20 @@ def get_table(data, idname):
     return DataTable(fill_width=True, columns=lstcolumns, data=data.to_dict('records'), id=idname, **format_table)
 
 def get_header():
-    # navbar = html.Div([
-    #
-    #     html.Div([
-    #         html.H1(
-    #             'Шапка сторінки з показниками програм')
-    #     ], className="twelve columns padded"),
-    #
-    # ], className="row gs-header gs-text-header")
     navbar = dbc.NavbarSimple(id="id_header",
         children=[
-            dbc.NavItem(dbc.NavLink("Про-ДАР", href="https://www.dar.gov.ua/about-dar",className="menu_list-link"), className="menu_list-item",
+            dbc.NavItem(dbc.NavLink("Про ДАР", href="https://www.dar.gov.ua/about-dar",target="https://www.dar.gov.ua/about-dar",
+                                    ), className="text-darck",
         # style={"font-family": "e-ukraine-heading"}
                         ),
             dmc.Divider(orientation="vertical", style={"height": 40}),
-            dbc.NavItem(dbc.NavLink("Новини", href="https://www.dar.gov.ua/news",className="menu_list-link"), className="menu_list-item",
+            dbc.NavItem(dbc.NavLink("Новини", href="https://www.dar.gov.ua/news",target="https://www.dar.gov.ua/news",
+                                    ), className="text-darck",
         # style={"font-family": "e-ukraine-heading"}
                         ),
             dmc.Divider(orientation="vertical", style={"height": 40}),
-            dbc.NavItem(dbc.NavLink("Корисне", href="https://www.dar.gov.ua/useful",className="menu_list-link"), className="menu_list-item",
+            dbc.NavItem(dbc.NavLink("Корисне", href="https://www.dar.gov.ua/useful",target="https://www.dar.gov.ua/useful",
+                                    ), className="text-darck",
         # style={"font-family": "e-ukraine-heading"}
                         ),
             dmc.Divider(orientation="vertical", style={"height": 40}),
@@ -254,15 +250,17 @@ def get_header():
                 in_navbar=True,
                 label="Наші телефони",
                 #style={"font-family": "e-ukraine-heading"}
+                className="text-darck"
             ),
-            dbc.Button("Увійти до кабінету", href="http://reg.dar.gov.ua",
-                       className="btn_sign js-btn_sign", #style={"height": "1cm", "font-family": "e-ukraine-heading"}
+            dbc.Button("Увійти до кабінету", href="http://reg.dar.gov.ua",target="http://reg.dar.gov.ua",
+                       className="dia-button", #style={"height": "1cm", "font-family": "e-ukraine-heading"} dia-button btn_sign js-btn_sign
                        ),
         ],
-        brand="Статистика ДАР",
+        brand=html.Img(src=get_app_assets('DAR.png'), height="70px"),
         brand_href="#",
-        # dark=True,
-        style={'background-color': '#e2ecf4', "color": "black", "font-family": "e-ukraine-heading"},    )
+        color='#e2ecf4',
+        fluid=True,
+        style={'background-color': '#e2ecf4', "color": "black", "font-family": "e-ukraine-heading","margin-top": '-10px',},) #, "margin-top": '-50px'
 
     return navbar
 
@@ -389,7 +387,16 @@ def get_sidebar():
                 ],
                     vertical=True,
                     pills=True,
-                    navbar_scroll=True
+                    navbar_scroll=True,
+                    style={
+                            "font-size": "12px",
+                            "font-weight": "300",
+                            "line-height": "16px",
+                            "cursor": "pointer",
+                            "font-family": "e-ukraine",
+                            "text-color": "black"
+
+                    }
                 ),
                 id="collapse",
                 navbar=False
@@ -624,16 +631,16 @@ def get_footer():
                         className='d-inline-flex align-center text-white-50'),
                 dbc.Row([
                     dbc.Col([html.Img(src=get_app_assets('trident.png'), style={'display': 'block', 'max-width': '60%','max-height': '60%',}),
-                             html.H1(children=['Міністерство аграрної політики та продовольства України'],
+                             html.P(children=['Міністерство аграрної політики та продовольства України'],
                                      style={'margin-left': '20', 'padding-left': '10px'}, className='h5'),
                              dmc.Divider(orientation="vertical", style={"height": 70}),
-                             html.H1(children=['Державний аграрний реєстр 2023. Всі права захищені'],
+                             html.P(children=['Державний аграрний реєстр 2023. Всі права захищені'],
                                      style={'padding-left': '10px'}, className='h5'),
 
                              ], width=8, className='d-flex justify-content-start'),
 
                     dbc.Col([html.Img(src=get_app_assets('DiaLogo_02.png'), style={'display': 'inline-block', 'max-width': '60%','max-height': '60%',}),
-                             html.H1(
+                             html.P(
                                  children=['Створено з використанням дизайну Дія diia.gov.ua 2023. Всі права захищені'],
                                  style={'padding-left': '10px'}, className='h5'),
                              ],
@@ -669,16 +676,16 @@ def get_footer2():
                             dbc.Row(html.P([html.A("З питань роботи у ДАР звертайтесь до контакт-центру: (044) 339-92-15, ", className='text-white'),
                                 html.A("support@dar.gov.ua", href="mailto:support@dar.gov.ua", target='_blank',
                                        className='text-white'), ]),
-                        style={'display': 'flex', 'flexDirection': 'column', 'text-align': 'center', 'height': '25px','margin-top': '5px'}),
+                        style={'display': 'flex', 'flexDirection': 'column', 'text-align': 'center', 'height': '25px','margin-top': '5px','font-size': '15px'}),
 
                             # Вторая строка
                             dbc.Row([
                                 # Колонка 1 , width=3
                                 dbc.Col([
-                                    html.Img(src=get_app_assets('trident.png'), style={'display': 'inline-block', 'margin-top': '10px', 'max-height': '40px'}),
-                                    html.H1(children=['Міністерство аграрної політики та продовольства України'], style={'word-wrap': 'break-word','margin-top': '10px'}),
-                                         dmc.Divider(orientation="vertical", style={"height": '50', 'padding-left': '15px', 'padding-right': '15px'}),
-                                         html.H1(children=['Державний аграрний реєстр 2023. Всі права захищені'], style={'word-wrap': 'break-word','margin-top': '10px'})
+                                    html.Img(src=get_app_assets('trident.png'), style={'display': 'inline-block', 'margin-top': '5px', 'max-height': '40px'}),
+                                    html.P(children=['Міністерство аграрної політики та продовольства України'], style={'word-wrap': 'break-word','margin-top': '10px', 'padding-left': '10px'}),
+                                         dmc.Divider(orientation="vertical", style={"height": '50'}),
+                                         html.P(children=['Державний аграрний реєстр 2023. Всі права захищені'], style={'word-wrap': 'break-word','margin-top': '10px', 'padding-left': '10px'})
                                                 ],
                                         width=5,
                                         # className='footer-column',
@@ -686,28 +693,32 @@ def get_footer2():
                                     ),
                                 dbc.Col(width=4,),
                                 # Колонка 2
-                                dbc.Col([html.Img(src=get_app_assets('DiaLogo_02.png'), style={'display': 'inline-block', 'margin-top': '10px', 'max-height': '40px',}),
-                                                html.H1(children=['Створено з використанням дизайну Дія diia.gov.ua 2023. Всі права захищені'],
-                                                style={'word-wrap': 'break-word','margin-top': '10px', 'padding-left': '10px'}),
+                                dbc.Col([html.Img(src=get_app_assets('DiaLogo_02.png'), style={'display': 'inline-block', 'margin-top': '5px', 'max-height': '40px',}),
+                                                html.P(children=['Створено з використанням дизайну Дія diia.gov.ua 2023. Всі права захищені'],
+                                                style={'word-wrap': 'break-word','margin': '10px'}),
                                                 ],
                                          width=3,
                                          # className='footer-column',
                                          style={'display': 'flex', 'flexDirection': 'row', 'text-align': 'left'}),
                             ],
                                 className='d-flex',
-                                style={'display': 'flex', 'border-top': '2px inset'}),
+                                style={'display': 'flex', 'border-top': '2px inset','font-size': '10px'}),
                         ],
+                        fluid=True,
                         className='footer',
-                        style={'display': 'flex', 'flexDirection': 'column',
-                            'width': '100%',
-                            'margin-left': '4vw',
-                            'margin-right': '4vw',
-                            # 'max-height': '125px',
-                            'background-color': 'black',
-                            # 'position': 'fixed',
-                            # 'bottom': '0',
-                            # 'overflow': 'hidden',
-                            'color':'white'
+                        style={'display': 'flex',
+                                'flexDirection': 'column',
+                                'width': '100%',
+                                "margin-top": '20px',
+                                # 'margin-left': '4vw',
+                                # 'margin-right': '4vw',
+                                'max-height': '125px',
+                                'background-color': 'black',
+                                'bottom': '0',
+                                "font-family": "e-ukraine",
+                                # 'overflow': 'hidden',
+                                # 'position': 'fixed',
+                                'color': 'white'
                         },
                     )
     return footer

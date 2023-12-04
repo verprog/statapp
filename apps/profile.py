@@ -8,8 +8,8 @@ import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
 
 df_prof = commonmodules.df_prof
-mapIndicator = commonmodules.mapIndicator
-fig = commonmodules.get_map()
+navbar = commonmodules.get_header()
+footer = commonmodules.get_footer2()
 
 selector_period = get_datepicker('date_picker_prof')
 selector_type = get_selector('type_user_selector_prof', "Вибір особи", commonmodules.typelst, True, False)
@@ -19,7 +19,7 @@ selector_area = get_selector('area_selector_prof', "Вибір площі", comm
 selector_gender = get_selector('gender_selector_prof', "Стать", commonmodules.genderlst, False, False)
 
 
-layout = html.Div([
+layout = html.Div([navbar,
                 dbc.Card(
                         dbc.CardBody([
                             dbc.Row(dbc.Card(dbc.CardBody([selector_period, selector_type, selector_region, selector_area, selector_gender, selector_kved], className="row row-cols-auto mb-4 gap-3"))),
@@ -27,10 +27,11 @@ layout = html.Div([
                             dbc.Row(id='dash_tab_prof', align='center'),
                             html.Br(),
                             dbc.Row([dbc.Col(width=10),
-                                     dbc.Col([dbc.Button("Download Excel", id="btn_xlsx_prof"),
+                                     dbc.Col([dbc.Button("Завантажити Excel", id="btn_xlsx_prof", className="dia-button"),
                                      dcc.Download(id="download-xlsx-prof")], width=2)], align='center'),
                         ]), color='light'
-                    )
+                    ),
+                footer
                 ])
 
 

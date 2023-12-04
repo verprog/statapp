@@ -8,8 +8,8 @@ import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
 
 df_animal = commonmodules.df_animal
-mapIndicator = commonmodules.mapIndicator
-fig = commonmodules.get_map()
+navbar = commonmodules.get_header()
+footer = commonmodules.get_footer2()
 
 selector_type = get_selector('type_user_selector_animal', "Вибір особи", commonmodules.typelst, True, False)
 selector_region = get_selector('region_selector_animal', "Вибір регіонів", commonmodules.regionlst, True, True)
@@ -17,7 +17,7 @@ selector_animal = get_selector('animal_selector_animal', "Вид тварини"
 selector_gender = get_selector('genderanimal_selector_animal', "Стать", commonmodules.genderanimallst, True, False)
 
 
-layout = html.Div([
+layout = html.Div([navbar,
                 dbc.Card(
                         dbc.CardBody([
                             dbc.Row(dbc.Card(dbc.CardBody([selector_type, selector_region, selector_animal, selector_gender], className="row row-cols-auto mb-4 gap-3"))),
@@ -25,10 +25,11 @@ layout = html.Div([
                             dbc.Row(id='dash_tab_animal', align='center'),
                             html.Br(),
                             dbc.Row([dbc.Col(width=10),
-                                     dbc.Col([dbc.Button("Download Excel", id="btn_xlsx_animal"),
+                                     dbc.Col([dbc.Button("Завантажити Excel", id="btn_xlsx_animal", className="dia-button"),
                                      dcc.Download(id="download-xlsx-animal")], width=2)], align='center'),
                         ]), color='light'
-                    )
+                    ),
+                   footer
                 ])
 
 

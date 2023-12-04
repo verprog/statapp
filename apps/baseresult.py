@@ -10,6 +10,8 @@ import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
 
 
+navbar = commonmodules.get_header()
+footer = commonmodules.get_footer2()
 dfu = commonmodules.dfu
 mapIndicator = commonmodules.mapIndicator
 fig = commonmodules.get_map()
@@ -17,7 +19,8 @@ selector_period = get_datepicker('date_picker')
 selector_type = get_selector('type_user_selector', "Вибір особи", commonmodules.typelst, True, False)
 selector_region = get_selector('region_selector', "Вибір регіонів", commonmodules.regionlst, True, True)
 
-layout = html.Div([dbc.Card(
+layout = html.Div([navbar,
+                   dbc.Card(
                             dbc.CardBody([
                                 dbc.Row(dbc.Card(dbc.CardBody([selector_period, selector_type, selector_region],
                                                               className="row row-cols-auto mb-4 gap-3"))),
@@ -25,10 +28,11 @@ layout = html.Div([dbc.Card(
                                 dbc.Row(id='dash_tab_map', align='center'),
                                 html.Br(),
                                 dbc.Row([dbc.Col(width=10),
-                                         dbc.Col([dbc.Button("Download Excel", id="btn_xlsx"),
+                                         dbc.Col([dbc.Button("Завантажити Excel", id="btn_xlsx", className="dia-button"),
                                          dcc.Download(id="download-xlsx-map")], width=2)], align='center'),
                             ]), color='light'
-                        )
+                        ),
+                    footer
                     ])
 
 

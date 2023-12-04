@@ -1,0 +1,43 @@
+a {
+  color: #000;
+  outline: none;
+  text-decoration: none;
+  padding: 2px 1px 0;
+}
+/*
+a:link {
+  color: #000;
+}
+*/
+/*
+a:visited {
+  color: #437a16;
+}
+*/
+/*
+a:focus {
+  border-bottom: 2px solid;
+  background: #bae498;
+}*/
+
+a:hover {
+  border-bottom: 2px solid;
+  /*background: #cdfeaa;*/
+}
+/*
+a:active {
+  background: #265301;
+  color: #cdfeaa;
+}*/
+
+linkmenu {
+  color: #000;
+  outline: none;
+  text-decoration: none;
+  padding: 2px 1px 0;
+}
+
+linkmenu:hover {
+  border-bottom: 2px solid;
+  /*background: #cdfeaa;*/
+}

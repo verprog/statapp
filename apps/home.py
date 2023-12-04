@@ -64,8 +64,11 @@ def drawText(pdata, pvalue):
 
 mapIndicator = commonmodules.mapIndicator
 fig = commonmodules.get_map()
+navbar = commonmodules.get_header()
+footer = commonmodules.get_footer2()
 
-layout = html.Div([dbc.Card(
+layout = html.Div([navbar,
+                   dbc.Card(
     dbc.CardBody([dbc.Row([dbc.Col([drawText(i[0], i[1])], width=3) for i in mapIndicator.values], align='center'),
                   html.Br(),
                   dbc.Row([
@@ -73,9 +76,12 @@ layout = html.Div([dbc.Card(
                                               dbc.CardBody(dbc.Row([dbc.Col(drawFigure(**diseredict), width=6),
                                                                     dbc.Col(drawFigure(**providedict), width=6)]))]
                                              ), width=6),
-                            dbc.Col(dbc.Card(dbc.CardBody(dcc.Graph(id='choropleth_map', figure=fig, config={'scrollZoom': False}))),
-                              width=6), ], align='center')
+                            dbc.Col(dbc.Card([dbc.CardHeader('Мапа регіонів України',style={'textAlign': 'center',"font-family": "e-ukraine-heading"}),
+                                              dbc.CardBody(dcc.Graph(id='choropleth_map', figure=fig, config={'scrollZoom': False}))]
+                                             ),width=6),
+                                    ], align='center')
                   ]), color='light',
                         style={'background-color': '#e7f5f5'}
-                                )
+                                ),
+                    footer
                     ])

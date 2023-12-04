@@ -8,8 +8,8 @@ import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
 
 df_flows = commonmodules.df_prog
-mapIndicator = commonmodules.mapIndicator
-fig = commonmodules.get_map()
+navbar = commonmodules.get_header()
+footer = commonmodules.get_footer2()
 
 selector_date_flow = get_datepicker('date_picker_flow')
 selector_type = get_selector('type_user_selector_flows', "Вибір особи", commonmodules.typelst, True, False)
@@ -18,7 +18,7 @@ selector_typepro = get_selector('typepro_selector_flows', "Тип програм
 selector_typesup = get_selector('typesup_selector_flows', "Назва програми", commonmodules.typesuplst, True, False)
 
 
-layout = html.Div([
+layout = html.Div([navbar,
                 dbc.Card(
                         dbc.CardBody([
                             dbc.Row(dbc.Card(dbc.CardBody([selector_date_flow, selector_type, selector_region, selector_typepro, selector_typesup], className="row row-cols-auto mb-4 gap-3"))),
@@ -26,10 +26,10 @@ layout = html.Div([
                             dbc.Row(id='dash_tab_flows', align='center'),
                             html.Br(),
                             dbc.Row([dbc.Col(width=10),
-                                     dbc.Col([dbc.Button("Download Excel", id="btn_xlsx_flows"),
+                                     dbc.Col([dbc.Button("Завантажити Excel", id="btn_xlsx_flows", className="dia-button"),
                                      dcc.Download(id="download-xlsx-flows")], width=2)], align='center'),
                         ]), color='light'
-                    )
+                    ),footer
                 ])
 
 

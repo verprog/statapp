@@ -16,38 +16,35 @@ app._favicon = 'assets/favicon.ico'
 server = app.server
 
 # app.config.suppress_callback_exceptions = True
-navbar = commonmodules.get_header()
 sidebar = commonmodules.get_sidebar()
-footer = commonmodules.get_footer2()
 
 content = html.Div(id="page-content")
 
-app.layout = html.Div([dcc.Location(id="url"), navbar, sidebar, content, footer],
+app.layout = html.Div([dcc.Location(id="url"), sidebar, content],
                       style={'background-color': '#e2ecf4',
-                             "min-height": "100vh"}
+                             "min-height": "100vh",
+                             "font-size": "12px"}
                       )
 
-
-@app.callback(
-[Output("page-content", "children"),
-        Output("id_header", "brand")],
+@app.callback(Output("page-content", "children"),
         [Input("url", "pathname")])
+        # Output("id_header", "brand")
 def render_page_content(pathname):
     nm = "Статистика ДАР"
     if pathname == "/base":
-        return baseresult.layout, f"{nm} - Основні результати"
+        return baseresult.layout #, f"{nm} - Основні результати"
     elif pathname == "/profile":
-        return profile.layout, f"{nm} - Профіль користувача"
+        return profile.layout #, f"{nm} - Профіль користувача"
     elif pathname == "/land":
-        return landbank.layout, f"{nm} - Земельний банк"
+        return landbank.layout #, f"{nm} - Земельний банк"
     elif pathname == "/animals":
-        return animals.layout, f"{nm} - Тварини"
+        return animals.layout #, f"{nm} - Тварини"
     elif pathname == "/supportflows":
-        return supportflows.layout, f"{nm} - Аналіз напрямів підтримки"
+        return supportflows.layout #, f"{nm} - Аналіз напрямів підтримки"
     elif pathname == "/recipients":
-        return recipients.layout, f"{nm} - Перелік отримувачів"
+        return recipients.layout #, f"{nm} - Перелік отримувачів"
     elif pathname == "/":
-        return home.layout, f"{nm}"
+        return home.layout #, f"{nm}"
     # If the user tries to reach a different page, return a 404 message
     return html.Div(
         [
@@ -82,4 +79,4 @@ def toggle_collapse(n, is_open):
 
 
 if __name__ == "__main__":
-    app.run_server()
+    app.run_server(debug=True)
