@@ -1,7 +1,14 @@
 #sidebar {
   text-align: center;
   padding: 2rem 1rem;
-  background-color: #f8f9fa;
+  background-color: #e2ecf4;
+  font-family: e-ukraine,sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 12px;
+  cursor: pointer;
+  border-right: thick double #000;
+  /* border-right: 4mm ridge #e2ecf4; */
 }
 
 #sidebar h2 {
@@ -37,7 +44,7 @@
     top: 0;
     left: 0;
     bottom: 0;
-    width: 20rem;
+    width: 18rem;
     text-align: left;
     transition: margin 0.3s ease-in-out, padding 0.3s ease-in-out;
   }
@@ -51,7 +58,7 @@
 
   /* add negative margin to sidebar to achieve the collapse */
   #sidebar.collapsed {
-    margin-left: -15.5rem;
+    margin-left: -13.5rem;
     padding-right: 0.5rem;
   }
 
@@ -88,9 +95,13 @@
 
   /* set margins of the main content so that it doesn't overlap the sidebar */
   #page-content {
-    /* margin-left: 22rem;*/
-    margin-left: 6rem;
+     margin-left: 20rem;
+    /*margin-left: 6rem;*/
     margin-right: 2rem;
     transition: margin-left 0.3s ease-in-out;
   }
+    /* set margins of the main content so that it doesn't overlap the sidebar */
+
 }
+
+

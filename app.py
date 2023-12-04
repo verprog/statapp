@@ -17,21 +17,21 @@ server = app.server
 
 # app.config.suppress_callback_exceptions = True
 navbar = commonmodules.get_header()
-sidebar = commonmodules.get_sidebar2()
-footer = commonmodules.get_footer()
+sidebar = commonmodules.get_sidebar()
+footer = commonmodules.get_footer2()
 
 content = html.Div(id="page-content")
 
 app.layout = html.Div([dcc.Location(id="url"), navbar, sidebar, content, footer],
-                      style={'background-color': '#e7f5f5',
-                             "height": "100vh"}
+                      style={'background-color': '#e2ecf4',
+                             "min-height": "100vh"}
                       )
 
 
 @app.callback(
 [Output("page-content", "children"),
         Output("id_header", "brand")],
-    [Input("url", "pathname")])
+        [Input("url", "pathname")])
 def render_page_content(pathname):
     nm = "Статистика ДАР"
     if pathname == "/base":
@@ -82,4 +82,4 @@ def toggle_collapse(n, is_open):
 
 
 if __name__ == "__main__":
-    app.run_server()
+    app.run_server(debug=True)

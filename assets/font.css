@@ -1,12 +1,7 @@
-@font-face {
-  font-family: 'MyFont';
-  src: url('../webfont.eot'); /* Поддерживается в IE9 */
-  src: url('webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('webfont.woff2') format('woff2'), /* Для супер современных браузеров */
-       url('webfont.woff') format('woff'), /* Для супер современных браузеров */
-       url('webfont.ttf')  format('truetype'), /* Для Сафари, Андроид, iOS и почти всех других */
-       url('webfont.svg#svgFontName') format('svg'); /* Для iOS */
-}
+
+
+
+
 "btn_sign js-btn_sign"
 .btn_register, .btn_sign, .btn_sign-auth {
   margin: 0;

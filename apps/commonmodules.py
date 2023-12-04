@@ -44,6 +44,10 @@ df_animal = pd.read_csv(csv_file_animal)
 df_prog = pd.read_csv(csv_file_prog)
 df_profile = pd.read_csv(csv_file_recip)
 
+
+# df_prog.to_excel(f"df_prog json.xlsx", sheet_name="Sheet_1", index=False)
+# df_profile.to_excel(f"df_profile json.xlsx", sheet_name="Sheet_1", index=False)
+
 formatnum0 = dict(specifier=',.2f', locale=dict(separate_4digits=False))
 formatnum2 = dict(specifier=',.2f', locale=dict(separate_4digits=False))
 columnsdict=\
@@ -161,7 +165,11 @@ def get_table(data, idname):
                         page_size=20,
                         sort_action='native',
                         style_table={'overflowX': 'auto'},
-                        style_header={'border': '1px solid black', 'textAlign': 'center', 'fontWeight': 'bold'},
+                        style_header={"border": "1px solid black",
+                                      "textAlign": "center",
+                                      "font-family": "e-ukraine-heading",
+                                      "backgroundColor": "#e7eef3",
+                                      "border": "1px solid #e7eef3"},#, 'fontWeight': 'bold'
                         style_cell={
                             # "minWidth": "180px",
                             # "width": "180px",
@@ -170,8 +178,10 @@ def get_table(data, idname):
                             "textOverflow": "ellipsis",
                             'textAlign': 'left',
                             # "maxWidth": 0
-                            'font_family': 'e-Ukraine',
-                            'font_size': '14px',
+                            'font_family': 'e-ukraine',
+                            'font_size': '11px',
+                            "backgroundColor": "#fdfeff",
+                            "border": "1px solid #e7eef3"
                         },
                         # {'textAlign': 'left'},
 
@@ -182,6 +192,10 @@ def get_table(data, idname):
                             #     },
                             #     'textAlign': 'left'
                             # },
+                            {
+                                    "if": {"row_index": "odd"},
+                                    "backgroundColor": "#f8fbff",
+                            },
                             {
                                 'if': {
                                     'column_type': 'numeric'  # 'text' | 'any' | 'datetime' | 'numeric'
@@ -218,11 +232,17 @@ def get_header():
     # ], className="row gs-header gs-text-header")
     navbar = dbc.NavbarSimple(id="id_header",
         children=[
-            dbc.NavItem(dbc.NavLink("Про ДАР", href="https://www.dar.gov.ua/about-dar",className="menu_list-link"), className="menu_list-item"),
+            dbc.NavItem(dbc.NavLink("Про-ДАР", href="https://www.dar.gov.ua/about-dar",className="menu_list-link"), className="menu_list-item",
+        # style={"font-family": "e-ukraine-heading"}
+                        ),
             dmc.Divider(orientation="vertical", style={"height": 40}),
-            dbc.NavItem(dbc.NavLink("Новини", href="https://www.dar.gov.ua/news",className="menu_list-link"), className="menu_list-item"),
+            dbc.NavItem(dbc.NavLink("Новини", href="https://www.dar.gov.ua/news",className="menu_list-link"), className="menu_list-item",
+        # style={"font-family": "e-ukraine-heading"}
+                        ),
             dmc.Divider(orientation="vertical", style={"height": 40}),
-            dbc.NavItem(dbc.NavLink("Корисне", href="https://www.dar.gov.ua/useful",className="menu_list-link"), className="menu_list-item"),
+            dbc.NavItem(dbc.NavLink("Корисне", href="https://www.dar.gov.ua/useful",className="menu_list-link"), className="menu_list-item",
+        # style={"font-family": "e-ukraine-heading"}
+                        ),
             dmc.Divider(orientation="vertical", style={"height": 40}),
             dbc.DropdownMenu(
                 children=[
@@ -233,21 +253,23 @@ def get_header():
                 nav=True,
                 in_navbar=True,
                 label="Наші телефони",
+                #style={"font-family": "e-ukraine-heading"}
             ),
             dbc.Button("Увійти до кабінету", href="http://reg.dar.gov.ua",
-                       className="btn_sign js-btn_sign", style={"height": "1cm"}
+                       className="btn_sign js-btn_sign", #style={"height": "1cm", "font-family": "e-ukraine-heading"}
                        ),
         ],
         brand="Статистика ДАР",
         brand_href="#",
         # dark=True,
-        className="bg-opacity-75 p-2 m-1 mx-auto bg-light text-dark fw-bold border rounded"
-    )
+        style={'background-color': '#e2ecf4', "color": "black", "font-family": "e-ukraine-heading"},    )
+
     return navbar
 
-def get_menu():
-    menu = html.Div([
 
+def get_menu():
+    menu = html.Div([dbc.Col(width=8),
+                     dbc.Col([
         dcc.Link("Про ДАР", href="https://www.dar.gov.ua/about-dar", target="https://www.dar.gov.ua/about-dar", className="p-2 text-dark"),
         dcc.Link("Новини", href="https://www.dar.gov.ua/news", target="https://www.dar.gov.ua/news", className="p-2 text-dark"),
         dcc.Link("Корисне", href="https://www.dar.gov.ua/useful",target="https://www.dar.gov.ua/useful", className="p-2 text-dark"),
@@ -262,10 +284,11 @@ def get_menu():
             label="Наші телефони",
         ),
         dbc.Button("Увійти до кабінету", href="http://reg.dar.gov.ua",
-                   className="btn_sign js-btn_sign", style={"height": "1cm"}
-                   )
-
-    ], className="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm")
+                   className="btn_sign js-btn_sign", #style={"height": "1cm"}
+                   )]
+                    )
+    ], className="d-flex flex-row flex-md-row align-items-center p-3 px-md-4 mb-3 border-bottom shadow-sm",
+        style={'background-color': '#e2ecf4', "color": "black"})
     return menu
 
 
@@ -273,7 +296,8 @@ def get_menu():
 # it consists of a title, and a toggle, the latter is hidden on large screens
 def get_sidebar():
     sidebar_header = dbc.Row([
-                        dbc.Col(html.H3("Панель навігації", className="display-5")),
+                        dbc.Col(html.H3("Панель навігації", style={"font-family": "e-ukraine-heading",
+                                                                   'font-size': '20px','word-wrap': 'break-word'})),
                         dbc.Col(
                             [
                                 html.Button(
@@ -312,26 +336,60 @@ def get_sidebar():
             sidebar_header,
             # we wrap the horizontal rule and short blurb in a div that can be
             # hidden on a small screen
-            html.Div(
-                [
-                    html.Hr(),
-                    html.P(
-                        "Виберіть розділ сайту",
-                        className="lead",
-                    ),
-                ],
-                id="blurb",
-            ),
+            # html.Div(
+            #     [
+            #         html.Hr(style={
+            #             'border': '2px  #000',  # Стиль линии: черного цвета */
+            #             'margin': '10px 0'  # Отступы вокруг линии */
+            #         }),
+            #         # html.P("Виберіть розділ",className="lead",),
+            #         # html.Hr(style={
+            #         #     'border': '2px  #000',  # Стиль линии: черного цвета */
+            #         #     'margin': '10px 0'  # Отступы вокруг линии */
+            #         # }),
+            #     ],
+            #     id="blurb",
+            # ),
             # use the Collapse component to animate hiding / revealing links
             dbc.Collapse(
                 dbc.Nav(
                     [
-                        dbc.NavLink("Головна", href="/", active="exact"),
-                        dbc.NavLink("Карта України", href="/map", active="exact"),
-                        dbc.NavLink("Графіки", href="/linechart", active="exact"),
-                    ],
+                                html.Hr(style={
+                                    'border': '2px  #000',  # Стиль линии: черного цвета */
+                                    'margin': '10px 0'  # Отступы вокруг линии */
+                                }),
+                    dbc.NavLink([html.I(className="fas fa-house me-2"), html.Span("Домашня сторінка"), ],
+                                href="/",
+                                active="exact",
+                                ),
+                    dbc.NavLink([html.I(className="fas fa-layer-group me-2"), html.Span("Основні результати"), ],
+                                href="/base",
+                                active="exact",
+                                ),
+                    dbc.NavLink([html.I(className="fas fa-solid fa-clipboard-user me-2"), html.Span("Профіль користувача")],
+                        href="/profile",
+                        active="exact",
+                    ),
+                    dbc.NavLink([html.I(className="fas fa-solid fa-earth-europe me-2"),html.Span("Земельний банк"),],
+                        href="/land",
+                        active="exact",
+                    ),
+                    dbc.NavLink([html.I(className="fa-solid fa-cow me-2"),html.Span("Тварини"),],
+                        href="/animals",
+                        active="exact",
+                    ),
+                    dbc.NavLink([html.I(className="fas fa-solid fa-microscope me-2"),html.Span("Аналіз напрямів підтримки"),],
+                        href="/supportflows",
+                        active="exact",
+                    ),
+                    dbc.NavLink([html.I(className="fa-solid fa-arrows-down-to-people me-2"),html.Span("Перелік отримувачів"),],
+                        href="/recipients",
+                        active="exact",
+                    ),
+                ],
                     vertical=True,
                     pills=True,
+                    navbar_scroll=True
                 ),
                 id="collapse",
                 navbar=False
@@ -356,7 +414,7 @@ def get_sidebar2():
             dbc.Nav(
                 [
 
-                    dbc.NavLink([html.I(className="fas fa-house me-2"), html.Span("Домашня сторінка"), ],
+                    dbc.NavLink([html.I(className="fa-solid fa-house me-2"), html.Span("Домашня сторінка"), ],
                                 href="/",
                                 active="exact",
                                 ),
@@ -390,6 +448,7 @@ def get_sidebar2():
             ),
         ],
         className="sidebar",
+        style={"font-family": "e-ukraine-heading"}
     )
     return sidebar
 
@@ -537,40 +596,34 @@ def get_footer():
     footer = html.Footer(
         dbc.Container(
             [
-                dbc.Row([dbc.Col([
-                    dbc.Row(html.H1(children=['Створено за підтримки:'], className='h3')),
-                    dbc.Row(html.Img(src=get_app_assets('62f4e23dfe7a4e5f2534ec18_EU_logo_white.png')
-                                     , style={'max-width': '18%',
-                                              'vertical-align': 'middle',
-                                              'display': 'inline-block', }
-                                     )
-                            )
-                ],
-                    style={'margin-top': 30},
-                    width=6,
-                    className='d-flex justify-content-start vstack gap-3'),
+                # dbc.Row([
+                #
+                #     dbc.Col([html.H1(children=['З питань роботи у ДАР звертайтесь до контакт-центру'],
+                #                      className='h5 text-muted'),
+                #              html.A("(044) 339-92-15", href="tel:+380443399215", target='_blank',
+                #                     style={"color": "white"}),
+                #              html.P([
+                #                  html.A("(044) 224-59-33", href="tel:+380442245933",
+                #                         target='_blank', className="order-1 align-items-end text-white"),
+                #                  html.A(' , '),
+                #                  html.A("support@dar.gov.ua", href="mailto:support@dar.gov.ua",
+                #                         target='_blank', style={"color": "white"},
+                #                         className="order-2 align-items-end text-white"),
+                #              ]
+                #              )],
+                #             style={'margin-top': 20},
+                #             width=6,
+                #             className='d-flex align-items-end flex-column  gap-3')
+                # ], className='d-flex',
+                #     style={'height': '200px', "color": "white"}),
 
-                    dbc.Col([html.H1(children=['З питань роботи у ДАР звертайтесь до контакт-центру'],
-                                     className='h5 text-muted'),
-                             html.A("(044) 339-92-15", href="tel:+380443399215", target='_blank',
-                                    style={"color": "white"}),
-                             html.P([
-                                 html.A("(044) 224-59-33", href="tel:+380442245933",
-                                        target='_blank', className="order-1 align-items-end text-white"),
-                                 html.A(' , '),
-                                 html.A("support@dar.gov.ua", href="mailto:support@dar.gov.ua",
-                                        target='_blank', style={"color": "white"},
-                                        className="order-2 align-items-end text-white"),
-                             ]
-                             )],
-                            style={'margin-top': 30},
-                            width=6,
-                            className='d-flex align-items-end flex-column  gap-3')
-                ], className='d-flex',
-                    style={'height': '400px', "color": "white"}),
-
+                dbc.Row(html.P([html.A("З питань роботи у ДАР звертайтесь до контакт-центру: (044) 339-92-15", className='text-white'),
+                                html.A("support@dar.gov.ua", href="mailto:support@dar.gov.ua", target='_blank',
+                                       className='text-white'), ]),
+                        style={'width': '100%','height': '25px', "color": "white"},
+                        className='d-inline-flex align-center text-white-50'),
                 dbc.Row([
-                    dbc.Col([html.Img(src=get_app_assets('trident.png')),
+                    dbc.Col([html.Img(src=get_app_assets('trident.png'), style={'display': 'block', 'max-width': '60%','max-height': '60%',}),
                              html.H1(children=['Міністерство аграрної політики та продовольства України'],
                                      style={'margin-left': '20', 'padding-left': '10px'}, className='h5'),
                              dmc.Divider(orientation="vertical", style={"height": 70}),
@@ -579,7 +632,7 @@ def get_footer():
 
                              ], width=8, className='d-flex justify-content-start'),
 
-                    dbc.Col([html.Img(src=get_app_assets('DiaLogo_02.png'), style={'max-width': '18%'}),
+                    dbc.Col([html.Img(src=get_app_assets('DiaLogo_02.png'), style={'display': 'inline-block', 'max-width': '60%','max-height': '60%',}),
                              html.H1(
                                  children=['Створено з використанням дизайну Дія diia.gov.ua 2023. Всі права захищені'],
                                  style={'padding-left': '10px'}, className='h5'),
@@ -587,25 +640,19 @@ def get_footer():
                             width=4,
                             className='d-flex justify-content-end')],
 
-                    style={'height': '100px', 'padding': '10px', "color": "white"}, className='d-flex border-top'
+                    style={'display': 'inline-block', 'height': '100px', 'padding': '10px', "color": "white"}, className='d-flex border-top'
                 ),
-                dbc.Row(html.P([html.A("© 2023 All rights reserved. Contact us at: ", className='text-white-50'),
-                                html.A("shenenko.av@gmail.com", href="mailto:shenenko.av@gmail.com", target='_blank',
-                                       className='text-white-50'), ]),
-                        style={'width': '100%','height': '25px', "color": "white"},
-                        className='d-inline-flex align-self-center text-white-50')
             ]
         ),
-        className='d-flex ',  # fixed-bottom mt-auto position-sticky top-100
+        className='d-flex',  # fixed-bottom mt-auto position-sticky top-100
         style={
             'max-width': 'none',
             'padding-left': '4vw',
             'padding-right': '4vw',
             'display': 'block',
-            'height': '525px',  # Set the fixed height of the footer here */
+            'height': '125px',  # Set the fixed height of the footer here */
             # 'line-height': '60px', # Vertically center the text there */
             'background-color': 'black',
-
             'border-top-style': 'double',
             'border-top-color': '#1866B9',
             'margin-left': 'auto',
@@ -614,4 +661,53 @@ def get_footer():
             , }
 
     )
+    return footer
+
+def get_footer2():
+    footer = dbc.Container(children=[
+                            # Первая строка
+                            dbc.Row(html.P([html.A("З питань роботи у ДАР звертайтесь до контакт-центру: (044) 339-92-15, ", className='text-white'),
+                                html.A("support@dar.gov.ua", href="mailto:support@dar.gov.ua", target='_blank',
+                                       className='text-white'), ]),
+                        style={'display': 'flex', 'flexDirection': 'column', 'text-align': 'center', 'height': '25px','margin-top': '5px'}),
+
+                            # Вторая строка
+                            dbc.Row([
+                                # Колонка 1 , width=3
+                                dbc.Col([
+                                    html.Img(src=get_app_assets('trident.png'), style={'display': 'inline-block', 'margin-top': '10px', 'max-height': '40px'}),
+                                    html.H1(children=['Міністерство аграрної політики та продовольства України'], style={'word-wrap': 'break-word','margin-top': '10px'}),
+                                         dmc.Divider(orientation="vertical", style={"height": '50', 'padding-left': '15px', 'padding-right': '15px'}),
+                                         html.H1(children=['Державний аграрний реєстр 2023. Всі права захищені'], style={'word-wrap': 'break-word','margin-top': '10px'})
+                                                ],
+                                        width=5,
+                                        # className='footer-column',
+                                        style={'display': 'flex', 'flexDirection': 'row', 'text-align': 'center','overflow': 'hidden',}
+                                    ),
+                                dbc.Col(width=4,),
+                                # Колонка 2
+                                dbc.Col([html.Img(src=get_app_assets('DiaLogo_02.png'), style={'display': 'inline-block', 'margin-top': '10px', 'max-height': '40px',}),
+                                                html.H1(children=['Створено з використанням дизайну Дія diia.gov.ua 2023. Всі права захищені'],
+                                                style={'word-wrap': 'break-word','margin-top': '10px', 'padding-left': '10px'}),
+                                                ],
+                                         width=3,
+                                         # className='footer-column',
+                                         style={'display': 'flex', 'flexDirection': 'row', 'text-align': 'left'}),
+                            ],
+                                className='d-flex',
+                                style={'display': 'flex', 'border-top': '2px inset'}),
+                        ],
+                        className='footer',
+                        style={'display': 'flex', 'flexDirection': 'column',
+                            'width': '100%',
+                            'margin-left': '4vw',
+                            'margin-right': '4vw',
+                            # 'max-height': '125px',
+                            'background-color': 'black',
+                            # 'position': 'fixed',
+                            # 'bottom': '0',
+                            # 'overflow': 'hidden',
+                            'color':'white'
+                        },
+                    )
     return footer
