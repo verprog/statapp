@@ -358,7 +358,6 @@ def get_sidebar():
                     dbc.NavLink([html.I(className="fas fa-house me-2"), html.Span("Домашня сторінка"), ],
                                 href="/",
                                 active="exact",
-                                className="dia-button"
                                 ),
                     dbc.NavLink([html.I(className="fas fa-layer-group me-2"), html.Span("Основні результати"), ],
                                 href="/base",
