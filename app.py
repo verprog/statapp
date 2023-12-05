@@ -23,7 +23,8 @@ content = html.Div(id="page-content")
 app.layout = html.Div([dcc.Location(id="url"), sidebar, content],
                       style={'background-color': '#e2ecf4',
                              "min-height": "100vh",
-                             "font-size": "12px"}
+                             # "font-size": "12px"
+                             }
                       )
 
 @app.callback(Output("page-content", "children"),

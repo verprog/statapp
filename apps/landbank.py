@@ -26,7 +26,7 @@ layout = html.Div([navbar,
                             dbc.Row(id='dash_tab_land', align='center'),
                             html.Br(),
                             dbc.Row([dbc.Col(width=10),
-                                     dbc.Col([dbc.Button("Завантажити Excel", id="btn_xlsx_land", className="dia-button"),
+                                     dbc.Col([dbc.Button("Завантажити Excel", id="btn_xlsx_land", className="dia-excel"),
                                      dcc.Download(id="download-xlsx-land")], width=2)], align='center'),
                         ]), color='light'
                     ),

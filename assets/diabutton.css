@@ -2,7 +2,6 @@
 .dia-button {
     box-shadow: none;
     border: none;
-    z-index: 1;
     letter-spacing: -0.02em;
     /*margin: 15px auto;*/
    /* display: inline-block;
@@ -13,7 +12,29 @@
     font-size: 12px;
     color: #fff;
     font-weight: 400;
-    line-height: 10px;
+    line-height: 12px;
+    color: #fff !important;
+    position: relative;
+    z-index: 1;
+    max-width: 300px;
+    text-align: center
+}
+
+/* Общий стиль кнопки */
+.dia-excel {
+    box-shadow: none;
+    border: none; /*5px solid #fff;*/
+    letter-spacing: -0.02em;
+    /*margin: 15px auto;*/
+   /* display: inline-block;
+    width: 100%;*/
+    border-radius: 40px;
+    padding: 16px 25px;
+    font-family: "e-ukraine-heading", sans-serif;
+    font-size: 12px;
+    /*color: #fff;*/
+    font-weight: 400;
+    line-height: 15px;
     color: #fff !important;
     position: relative;
     z-index: 1;
@@ -23,6 +44,7 @@
 
 /* Стиль при наведении */
 @media (min-width: 768px) {
+        .dia-excel:hover,
         .dia-button:hover {
                 transition: 0.2s ease-in-out;
                 background-image: linear-gradient(217deg, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0) 70.71%), linear-gradient(127deg, rgba(0, 0, 255, 0.8), rgba(0, 0, 255, 0) 70.71%), linear-gradient(336deg, rgba(0, 255, 0, 0.8), rgba(0, 255, 0, 0) 70.71%);
@@ -32,7 +54,7 @@
             }
 }
 
-
+.dia-excel:before,
 .dia-button:before {
     content: "";
     position: absolute;
@@ -50,10 +72,12 @@
 }
 
 @media (min-width: 768px) {
+    .dia-excel:hover,
     .dia-button:hover {
         color: #000;
         background-color: transparent
     }
+    .dia-excel:hover:before,
     .dia-button:hover:before {
         opacity: 0;
         visibility: hidden
@@ -61,18 +85,19 @@
 }
 
 
-
+.dia-excel:disabled:before,
 .dia-button:disabled:before {
     background-color: #ccc
 }
 
+.dia-excel-sm,
 .dia-button-sm {
     width: auto;
     min-width: 170px
 }
 
 @media (max-width: 991px) {
-
+    .dia-excel,
     .dia-button {
         display: block;
         width: 230px;
@@ -81,11 +106,13 @@
     }
 }
 
+.dia-excel,
 .dia-button {
     display: flex
 }
 
 @media (max-width: 991px) {
+    .dia-excel,
     .dia-button {
         justify-content: center
     }

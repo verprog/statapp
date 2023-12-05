@@ -151,8 +151,7 @@ def get_datepicker(idname):
                           start_date=last_day.replace(day=1).replace(month=1).date(),
                           end_date=last_day.date(),
                           display_format='DD.MM.YYYY',
-                          style={'max-height': '25px', 'padding-top': '3px'}
-                      )
+                          style={'max-height': '25px', 'padding-top': '3px'})
     return datepicker_period
 
 
@@ -359,6 +358,7 @@ def get_sidebar():
                     dbc.NavLink([html.I(className="fas fa-house me-2"), html.Span("Домашня сторінка"), ],
                                 href="/",
                                 active="exact",
+                                className="dia-button"
                                 ),
                     dbc.NavLink([html.I(className="fas fa-layer-group me-2"), html.Span("Основні результати"), ],
                                 href="/base",
