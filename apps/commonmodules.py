@@ -13,6 +13,7 @@ from dash import Dash, dcc, html, Output, Input, State, callback, no_update, das
 import dash_ag_grid as dag
 import dash_mantine_components as dmc
 from dash.dash_table.Format import Format, Scheme, Trim
+from dash_iconify import DashIconify
 import datetime
 
 
@@ -225,17 +226,17 @@ def get_header():
     navbar = dbc.NavbarSimple(id="id_header",
         children=[
             dbc.NavItem(dbc.NavLink("Про ДАР", href="https://www.dar.gov.ua/about-dar",target="https://www.dar.gov.ua/about-dar",
-                                    ), className="text-darck",
+                                    ), className="heada",
         # style={"font-family": "e-ukraine-heading"}
                         ),
             dmc.Divider(orientation="vertical", style={"height": 40}),
             dbc.NavItem(dbc.NavLink("Новини", href="https://www.dar.gov.ua/news",target="https://www.dar.gov.ua/news",
-                                    ), className="text-darck",
+                                    ), className="text-darck heada",
         # style={"font-family": "e-ukraine-heading"}
                         ),
             dmc.Divider(orientation="vertical", style={"height": 40}),
             dbc.NavItem(dbc.NavLink("Корисне", href="https://www.dar.gov.ua/useful",target="https://www.dar.gov.ua/useful",
-                                    ), className="text-darck",
+                                    ), className="text-darck heada",
         # style={"font-family": "e-ukraine-heading"}
                         ),
             dmc.Divider(orientation="vertical", style={"height": 40}),
@@ -249,7 +250,7 @@ def get_header():
                 in_navbar=True,
                 label="Наші телефони",
                 #style={"font-family": "e-ukraine-heading"}
-                className="text-darck"
+                className="text-darck heada"
             ),
             dbc.Button("Увійти до кабінету", href="http://reg.dar.gov.ua",target="http://reg.dar.gov.ua",
                        className="dia-button", #style={"height": "1cm", "font-family": "e-ukraine-heading"} dia-button btn_sign js-btn_sign
@@ -288,6 +289,12 @@ def get_menu():
         style={'background-color': '#e2ecf4', "color": "black"})
     return menu
 
+
+
+styl = {
+"padding": "7px 20px 6px 8px",
+"display": "flex",
+"align-items": "center",}
 
 # we use the Row and Col components to construct the sidebar header
 # it consists of a title, and a toggle, the latter is hidden on large screens
@@ -331,72 +338,29 @@ def get_sidebar():
     sidebar = html.Div(
         [
             sidebar_header,
-            # we wrap the horizontal rule and short blurb in a div that can be
-            # hidden on a small screen
-            # html.Div(
-            #     [
-            #         html.Hr(style={
-            #             'border': '2px  #000',  # Стиль линии: черного цвета */
-            #             'margin': '10px 0'  # Отступы вокруг линии */
-            #         }),
-            #         # html.P("Виберіть розділ",className="lead",),
-            #         # html.Hr(style={
-            #         #     'border': '2px  #000',  # Стиль линии: черного цвета */
-            #         #     'margin': '10px 0'  # Отступы вокруг линии */
-            #         # }),
-            #     ],
-            #     id="blurb",
-            # ),
-            # use the Collapse component to animate hiding / revealing links
-            dbc.Collapse(
-                dbc.Nav(
-                    [
-                                html.Hr(style={
-                                    'border': '2px  #000',  # Стиль линии: черного цвета */
-                                    'margin': '10px 0'  # Отступы вокруг линии */
-                                }),
-                    dbc.NavLink([html.I(className="fas fa-house me-2"), html.Span("Домашня сторінка"), ],
-                                href="/",
-                                active="exact",
-                                ),
-                    dbc.NavLink([html.I(className="fas fa-layer-group me-2"), html.Span("Основні результати"), ],
-                                href="/base",
-                                active="exact",
-                                ),
-                    dbc.NavLink([html.I(className="fas fa-solid fa-clipboard-user me-2"), html.Span("Профіль користувача")],
-                        href="/profile",
-                        active="exact",
-                    ),
-                    dbc.NavLink([html.I(className="fas fa-solid fa-earth-europe me-2"),html.Span("Земельний банк"),],
-                        href="/land",
-                        active="exact",
-                    ),
-                    dbc.NavLink([html.I(className="fa-solid fa-cow me-2"),html.Span("Тварини"),],
-                        href="/animals",
-                        active="exact",
-                    ),
-                    dbc.NavLink([html.I(className="fas fa-solid fa-microscope me-2"),html.Span("Аналіз напрямів підтримки"),],
-                        href="/supportflows",
-                        active="exact",
-                    ),
-                    dbc.NavLink([html.I(className="fa-solid fa-arrows-down-to-people me-2"),html.Span("Перелік отримувачів"),],
-                        href="/recipients",
-                        active="exact",
-                    ),
-                ],
-                    vertical=True,
-                    pills=True,
-                    navbar_scroll=True,
-                    style={
+            dbc.Collapse(dmc.Menu([
+            # dmc.MenuLabel("Application"),
+            dmc.MenuDivider(style={"color": "#fff"}),
+            dmc.MenuItem("Домашня сторінка", icon=DashIconify(icon="mdi:home"), className="menu-item", href="/", ),
+            dmc.MenuItem("Основні результати", icon=DashIconify(icon="uis:layer-group"), className="menu-item", href="/base",),
+            dmc.MenuItem("Профіль користувача", icon=DashIconify(icon="mdi:clipboard-user"), className="menu-item", href="/profile",),
+            dmc.MenuItem("Земельний банк", icon=DashIconify(icon="pepicons-pop:earth-europe"), className="menu-item", href="/land",),
+            dmc.MenuItem("Тварини", icon=DashIconify(icon="healthicons:animal-cow"), className="menu-item", href="/animals",),
+            dmc.MenuItem("Аналіз напрямів підтримки", icon=DashIconify(icon="icon-park-outline:analysis"), className="menu-item", href="/supportflows",),
+            dmc.MenuItem("Перелік отримувачів", icon=DashIconify(icon="fa6-solid:arrows-down-to-people"), className="menu-item", href="/recipients",),
+            dmc.MenuDivider(),
+                        ],
+                        style={
                             "font-size": "12px",
                             "font-weight": "300",
-                            "line-height": "16px",
+                            "line-height": "5px",
                             "cursor": "pointer",
                             "font-family": "e-ukraine",
-                            "text-color": "black"
+                            "text-color": "#fff",
 
-                    }
-                ),
+
+                        }
+                    ),
                 id="collapse",
                 navbar=False
             ),
@@ -404,6 +368,11 @@ def get_sidebar():
         id="sidebar",
     )
     return sidebar
+
+
+
+
+
 
 
 def get_sidebar2():

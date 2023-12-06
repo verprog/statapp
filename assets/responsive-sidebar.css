@@ -27,7 +27,7 @@
 }
 
 #collapse *:first-child {
-  margin-top: 1rem;
+  /*margin-top: 1rem;*/
 }
 
 /* add the three horizontal bars icon for the toggle */
