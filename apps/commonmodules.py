@@ -94,8 +94,8 @@ df_prof = df_prof[['RegistrationDate','LegalForm', 'Region', 'Id', 'Gender', 'Ki
 mapcolumn = {'area': 'Площа, га.', 'animal': 'Кількість тварин', 'giftamount': 'Надано підтримки, грн',
                'cntuser': 'Кількість кадастрових номерів'}
 
-mapData = dfu[['area', 'animal', 'giftamount', 'cntuser']]
-mapData.rename(columns=mapcolumn, inplace=True)
+mapData_pre = dfu[['area', 'animal', 'giftamount', 'cntuser']]
+mapData = mapData_pre.rename(columns=mapcolumn)
 
 mapIndicator = pd.DataFrame(mapData.sum(axis=0, skipna=True)).reset_index()
 mapIndicator.rename(columns={'index': 'DATA', 0: 'VALUE'}, inplace=True)
@@ -641,10 +641,11 @@ def get_footer():
 def get_footer2():
     footer = dbc.Container(children=[
                             # Первая строка
-                            dbc.Row(html.P([html.A("З питань роботи у ДАР звертайтесь до контакт-центру: (044) 339-92-15, ", className='text-white'),
-                                html.A("support@dar.gov.ua", href="mailto:support@dar.gov.ua", target='_blank',
-                                       className='text-white'), ]),
-                        style={'display': 'flex', 'flexDirection': 'column', 'text-align': 'center', 'height': '25px','margin-top': '5px','font-size': '15px'}),
+                            dbc.Row(
+                                html.P(["З питань роботи у ДАР звертайтесь до контакт-центру: (044) 339-92-15, ",
+                                html.A("support@dar.gov.ua", href="mailto:support@dar.gov.ua", target='_blank', className='text-white')],
+                                       style={'font-size': '12px', "text-decoration": "none", "text-color": "#000"}),
+                        style={'display': 'flex', 'flexDirection': 'column', 'text-align': 'center', 'height': '25px','margin-top': '5px',}),
 
                             # Вторая строка
                             dbc.Row([

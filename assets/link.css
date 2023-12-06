@@ -69,6 +69,7 @@ linkmenu:hover {
 
 .menu-item:hover {
     color: #000;
+    background-color: #fff;
     border-radius: 40px;
 }
 
@@ -82,3 +83,4 @@ linkmenu:hover {
     background-color: #fff;
     border-radius: 40px;
 }
+
