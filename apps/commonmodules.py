@@ -227,19 +227,16 @@ def get_header():
         children=[
             dbc.NavItem(dbc.NavLink("Про ДАР", href="https://www.dar.gov.ua/about-dar",target="https://www.dar.gov.ua/about-dar",
                                     ), className="heada",
-        # style={"font-family": "e-ukraine-heading"}
                         ),
-            dmc.Divider(orientation="vertical", style={"height": 40}),
+            # dmc.Divider(orientation="vertical", style={"height": 40}),
             dbc.NavItem(dbc.NavLink("Новини", href="https://www.dar.gov.ua/news",target="https://www.dar.gov.ua/news",
                                     ), className="text-darck heada",
-        # style={"font-family": "e-ukraine-heading"}
                         ),
-            dmc.Divider(orientation="vertical", style={"height": 40}),
+            # dmc.Divider(orientation="vertical", style={"height": 40}),
             dbc.NavItem(dbc.NavLink("Корисне", href="https://www.dar.gov.ua/useful",target="https://www.dar.gov.ua/useful",
                                     ), className="text-darck heada",
-        # style={"font-family": "e-ukraine-heading"}
                         ),
-            dmc.Divider(orientation="vertical", style={"height": 40}),
+            # dmc.Divider(orientation="vertical", style={"height": 40}),
             dbc.DropdownMenu(
                 children=[
                     dbc.DropdownMenuItem("Номери для звязку", header=True),
@@ -253,7 +250,7 @@ def get_header():
                 className="text-darck heada"
             ),
             dbc.Button("Увійти до кабінету", href="http://reg.dar.gov.ua",target="http://reg.dar.gov.ua",
-                       className="dia-button", #style={"height": "1cm", "font-family": "e-ukraine-heading"} dia-button btn_sign js-btn_sign
+                       className="dia-button",
                        ),
         ],
         brand=html.Img(src=get_app_assets('DAR.png'), height="70px"),
@@ -307,7 +304,7 @@ def get_sidebar():
                                 html.Button(
                                     # use the Bootstrap navbar-toggler classes to style
                                     html.Span(className="navbar-toggler-icon"),
-                                    className="navbar-toggler",
+                                    className="navbar-toggler collapsed",
                                     # the navbar-toggler classes don't set color
                                     style={
                                         "color": "rgba(0,0,0,.5)",
@@ -318,7 +315,7 @@ def get_sidebar():
                                 html.Button(
                                     # use the Bootstrap navbar-toggler classes to style
                                     html.Span(className="navbar-toggler-icon"),
-                                    className="navbar-toggler",
+                                    className="navbar-toggler collapsed",
                                     # the navbar-toggler classes don't set color
                                     style={
                                         "color": "rgba(0,0,0,.5)",
@@ -474,7 +471,7 @@ def get_map():
                         geo_scope="europe",
                         title='variable',
                         uirevision='constant',
-                        clickmode='event+select'
+                        clickmode='event' #'event+select'
                         )
 
     hovertemp = '<i>Територія:</i> %{customdata[0]}<br><i>Код регіону:</i> %{customdata[1]}<br>'
@@ -641,32 +638,30 @@ def get_footer():
 def get_footer2():
     footer = dbc.Container(children=[
                             # Первая строка
-                            dbc.Row(
-                                html.P(["З питань роботи у ДАР звертайтесь до контакт-центру: (044) 339-92-15, ",
+                            dbc.Row(html.P(["З питань роботи у ДАР звертайтесь до контакт-центру: (044) 339-92-15, ",
                                 html.A("support@dar.gov.ua", href="mailto:support@dar.gov.ua", target='_blank', className='text-white')],
-                                       style={'font-size': '12px', "text-decoration": "none", "text-color": "#000"}),
-                        style={'display': 'flex', 'flexDirection': 'column', 'text-align': 'center', 'height': '25px','margin-top': '5px',}),
+                                           ), className="footer-first-row"),
 
                             # Вторая строка
                             dbc.Row([
                                 # Колонка 1 , width=3
                                 dbc.Col([
                                     html.Img(src=get_app_assets('trident.png'), style={'display': 'inline-block', 'margin-top': '5px', 'max-height': '40px'}),
-                                    html.P(children=['Міністерство аграрної політики та продовольства України'], style={'word-wrap': 'break-word','margin-top': '10px', 'padding-left': '10px'}),
+                                    html.P(children=['Міністерство аграрної політики та продовольства України'], style={'word-wrap': 'break-word','margin-top': '5px', 'padding-left': '5px'}),
                                          dmc.Divider(orientation="vertical", style={"height": '50'}),
-                                         html.P(children=['Державний аграрний реєстр 2023. Всі права захищені'], style={'word-wrap': 'break-word','margin-top': '10px', 'padding-left': '10px'})
+                                         html.P(children=['Державний аграрний реєстр 2023. Всі права захищені'], style={'word-wrap': 'break-word','margin-top': '5px', 'padding-left': '5px'})
                                                 ],
-                                        width=5,
+                                        width=7,
                                         # className='footer-column',
                                         style={'display': 'flex', 'flexDirection': 'row', 'text-align': 'center','overflow': 'hidden',}
                                     ),
-                                dbc.Col(width=4,),
+                                # dbc.Col(width=4,),
                                 # Колонка 2
                                 dbc.Col([html.Img(src=get_app_assets('DiaLogo_02.png'), style={'display': 'inline-block', 'margin-top': '5px', 'max-height': '40px',}),
                                                 html.P(children=['Створено з використанням дизайну Дія diia.gov.ua 2023. Всі права захищені'],
-                                                style={'word-wrap': 'break-word','margin': '10px'}),
+                                                style={'word-wrap': 'break-word','margin': '5px'}),
                                                 ],
-                                         width=3,
+                                         width=5,
                                          # className='footer-column',
                                          style={'display': 'flex', 'flexDirection': 'row', 'text-align': 'left'}),
                             ],
@@ -675,19 +670,5 @@ def get_footer2():
                         ],
                         fluid=True,
                         className='footer',
-                        style={'display': 'flex',
-                                'flexDirection': 'column',
-                                'width': '100%',
-                                "margin-top": '20px',
-                                # 'margin-left': '4vw',
-                                # 'margin-right': '4vw',
-                                'max-height': '125px',
-                                'background-color': 'black',
-                                'bottom': '0',
-                                "font-family": "e-ukraine",
-                                # 'overflow': 'hidden',
-                                # 'position': 'fixed',
-                                'color': 'white'
-                        },
                     )
     return footer

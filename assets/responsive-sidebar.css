@@ -33,7 +33,38 @@
 /* add the three horizontal bars icon for the toggle */
 .navbar-toggler-icon {
   background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(0, 0, 0, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  /*background-image: none!important;*/
+  background-color: var(--bs-gray-800);
+  height: 3px;
+  width: 25px;
+  margin: 10px 0;
+  position: relative;
+  transition: all 0.35s ease-out;
+  transform-origin: center;
 }
+
+.navbar-toggler-icon::before {
+  display: block;
+  background-color: var(--bs-gray-800);
+  height: 3px;
+  content: "";
+  position: relative;
+  top: -7px;
+  transition: all 0.15s ease-out;/*taken down to hide quicker*/
+  transform-origin: center;
+}
+
+.navbar-toggler-icon::after {
+  display: block;
+  background-color: var(--bs-gray-800);
+  height: 3px;
+  content: "";
+  position: relative;
+  top: 4px;
+  transition: all 0.35s ease-out;
+  transform-origin: center;
+}
+
 
 #page-content {
   /* padding: 2rem 1rem; */
@@ -103,4 +134,14 @@
     /* set margins of the main content so that it doesn't overlap the sidebar */
 }
 
+#sidebar.collapsed > *:not(.collapsed) .navbar-toggler-icon {
+  transform: rotate(45deg);
+}
 
+#sidebar.collapsed > *:not(.collapsed) .navbar-toggler-icon::before {
+  opacity: 0;
+}
+
+#sidebar.collapsed > *:not(.collapsed) .navbar-toggler-icon::after {
+  transform: rotate(-90deg) translateX(7px);
+}

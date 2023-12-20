@@ -27,11 +27,9 @@ layout = html.Div([navbar,
                                 html.Br(),
                                 dbc.Row(id='dash_tab_map', align='center'),
                                 html.Br(),
-                                dbc.Row([dbc.Col(width=10),
-                                         dbc.Col([dbc.Button("Завантажити Excel", id="btn_xlsx", className="dia-excel"),
-                                         dcc.Download(id="download-xlsx-map")], width=2)], align='center'),
-                            ]), color='light'
-                        ),
+                                dbc.Row([dbc.Col([dbc.Button("Завантажити Excel", id="btn_xlsx",className="dia-excel"),
+                                                  dcc.Download(id="download-xlsx-map")], className="excelCol")]),
+                                        ]), color='light'),
                     footer
                     ])
 

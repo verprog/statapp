@@ -1,0 +1,19 @@
+.hederCard {
+            white-space: nowrap;
+            overflow: hidden;
+            text-align: center;
+            font-family: "e-ukraine-heading";
+            font-size: 1em;
+            },
+.bodyCard {
+            text-align: center;
+            font-size: 1em;
+            }
+			
+.excelCol{
+text-align: end
+}
+
+.colMapGraf{
+	width: 50%	
+}

@@ -29,7 +29,8 @@
    /* display: inline-block;
     width: 100%;*/
     border-radius: 40px;
-    padding: 16px 25px;
+    /*padding: 16px 25px;*/
+    padding: 6px 15px;
     font-family: "e-ukraine-heading", sans-serif;
     font-size: 12px;
     /*color: #fff;*/
@@ -39,7 +40,7 @@
     position: relative;
     z-index: 1;
     max-width: 300px;
-    text-align: center
+    text-align: end
 }
 
 /* Стиль при наведении */
@@ -97,7 +98,7 @@
 }
 
 @media (max-width: 991px) {
-    .dia-excel,
+    /*.dia-excel,*/
     .dia-button {
         display: block;
         width: 230px;
@@ -106,13 +107,13 @@
     }
 }
 
-.dia-excel,
+/*.dia-excel,*/
 .dia-button {
     display: flex
 }
 
 @media (max-width: 991px) {
-    .dia-excel,
+    /*.dia-excel,*/
     .dia-button {
         justify-content: center
     }
