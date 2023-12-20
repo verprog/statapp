@@ -338,8 +338,8 @@ def get_sidebar():
             dbc.Collapse(dmc.Menu([
             # dmc.MenuLabel("Application"),
             dmc.MenuDivider(style={"color": "#fff"}),
-            dmc.MenuItem("Домашня сторінка", icon=DashIconify(icon="mdi:home"), className="menu-item", href="/", ),
-            dmc.MenuItem("Основні результати", icon=DashIconify(icon="uis:layer-group"), className="menu-item", href="/base",),
+            dmc.MenuItem("Основні результати", icon=DashIconify(icon="mdi:home"), className="menu-item", href="/", ),
+            # dmc.MenuItem("Основні результати", icon=DashIconify(icon="uis:layer-group"), className="menu-item", href="/base",),
             dmc.MenuItem("Профіль користувача", icon=DashIconify(icon="mdi:clipboard-user"), className="menu-item", href="/profile",),
             dmc.MenuItem("Земельний банк", icon=DashIconify(icon="pepicons-pop:earth-europe"), className="menu-item", href="/land",),
             dmc.MenuItem("Тварини", icon=DashIconify(icon="healthicons:animal-cow"), className="menu-item", href="/animals",),
@@ -386,14 +386,14 @@ def get_sidebar2():
             dbc.Nav(
                 [
 
-                    dbc.NavLink([html.I(className="fa-solid fa-house me-2"), html.Span("Домашня сторінка"), ],
+                    dbc.NavLink([html.I(className="fa-solid fa-house me-2"), html.Span("Основні результати"), ],
                                 href="/",
                                 active="exact",
                                 ),
-                    dbc.NavLink([html.I(className="fas fa-layer-group me-2"), html.Span("Основні результати"), ],
-                                href="/base",
-                                active="exact",
-                                ),
+                    # dbc.NavLink([html.I(className="fas fa-layer-group me-2"), html.Span("Основні результати"), ],
+                    #             href="/base",
+                    #             active="exact",
+                    #             ),
                     dbc.NavLink([html.I(className="fas fa-solid fa-clipboard-user me-2"), html.Span("Профіль користувача")],
                         href="/profile",
                         active="exact",

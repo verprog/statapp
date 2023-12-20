@@ -32,8 +32,8 @@ app.layout = html.Div([dcc.Location(id="url"), sidebar, content],
         # Output("id_header", "brand")
 def render_page_content(pathname):
     nm = "Статистика ДАР"
-    if pathname == "/base":
-        return baseresult.layout #, f"{nm} - Основні результати"
+    if pathname == "/":
+        return home.layout #, f"{nm} - Основні результати"
     elif pathname == "/profile":
         return profile.layout #, f"{nm} - Профіль користувача"
     elif pathname == "/land":
@@ -44,8 +44,8 @@ def render_page_content(pathname):
         return supportflows.layout #, f"{nm} - Аналіз напрямів підтримки"
     elif pathname == "/recipients":
         return recipients.layout #, f"{nm} - Перелік отримувачів"
-    elif pathname == "/":
-        return home.layout #, f"{nm}"
+    elif pathname == "/base":
+        return baseresult.layout #, f"{nm} - Основні результати"
     # If the user tries to reach a different page, return a 404 message
     return html.Div(
         [
