@@ -44,16 +44,16 @@
 }
 
 /* Стиль при наведении */
-@media (min-width: 768px) {
-        .dia-excel:hover,
-        .dia-button:hover {
-                transition: 0.2s ease-in-out;
-                background-image: linear-gradient(217deg, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0) 70.71%), linear-gradient(127deg, rgba(0, 0, 255, 0.8), rgba(0, 0, 255, 0) 70.71%), linear-gradient(336deg, rgba(0, 255, 0, 0.8), rgba(0, 255, 0, 0) 70.71%);
-                background-size: 200% 300%;
-                -webkit-animation: 10s infinite granimate;
-                animation: 10s infinite granimate
-            }
-}
+/* @media (min-width: 768px) { */
+        /* .dia-excel:hover, */
+        /* .dia-button:hover { */
+                /* transition: 0.2s ease-in-out; */
+                /* background-image: linear-gradient(217deg, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0) 70.71%), linear-gradient(127deg, rgba(0, 0, 255, 0.8), rgba(0, 0, 255, 0) 70.71%), linear-gradient(336deg, rgba(0, 255, 0, 0.8), rgba(0, 255, 0, 0) 70.71%); */
+                /* background-size: 200% 300%; */
+                /* -webkit-animation: 10s infinite granimate; */
+                /* animation: 10s infinite granimate */
+            /* } */
+/* } */
 
 .dia-excel:before,
 .dia-button:before {
@@ -72,18 +72,18 @@
     transition: 0.2s ease-in-out
 }
 
-@media (min-width: 768px) {
-    .dia-excel:hover,
-    .dia-button:hover {
-        color: #000;
-        background-color: transparent
-    }
-    .dia-excel:hover:before,
-    .dia-button:hover:before {
-        opacity: 0;
-        visibility: hidden
-    }
-}
+/* @media (min-width: 768px) { */
+    /* .dia-excel:hover, */
+    /* .dia-button:hover { */
+        /* color: #000; */
+        /* background-color: transparent */
+    /* } */
+    /* .dia-excel:hover:before, */
+    /* .dia-button:hover:before { */
+        /* opacity: 0; */
+        /* visibility: hidden */
+    /* } */
+/* } */
 
 
 .dia-excel:disabled:before,
@@ -97,24 +97,22 @@
     min-width: 170px
 }
 
-@media (max-width: 991px) {
-    /*.dia-excel,*/
-    .dia-button {
-        display: block;
-        width: 230px;
-        margin: 5px auto;
-        padding: 16px 20px
-    }
-}
+/* @media (max-width: 991px) { */
+    /* .dia-button { */
+        /* display: block; */
+        /* width: 230px; */
+        /* margin: 5px auto; */
+        /* padding: 16px 20px */
+    /* } */
+/* } */
 
 /*.dia-excel,*/
 .dia-button {
     display: flex
 }
 
-@media (max-width: 991px) {
-    /*.dia-excel,*/
-    .dia-button {
-        justify-content: center
-    }
-}
+/* @media (max-width: 991px) { */
+    /* .dia-button { */
+        /* justify-content: center */
+    /* } */
+/* } */
