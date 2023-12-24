@@ -253,8 +253,8 @@ def get_header():
                        className="dia-button",
                        ),
         ],
-        brand=html.Img(src=get_app_assets('DAR.png'), height="70px"),
-        brand_href="#",
+        brand=html.A(href="http://dar.gov.ua", target="http://dar.gov.ua", children=[html.Img(src=get_app_assets('DAR.png'), height="70px")]),
+        brand_href="http://dar.gov.ua",
         color='#e2ecf4',
         fluid=True,
         style={'background-color': '#e2ecf4', "color": "black", "font-family": "e-ukraine-heading","margin-top": '-10px',},) #, "margin-top": '-50px'
