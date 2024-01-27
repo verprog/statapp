@@ -3,6 +3,7 @@ from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 # Import necessary libraries
 import geojson
+from plotly.subplots import make_subplots
 import json
 import plotly.express as px
 import plotly.offline as plot
@@ -29,6 +30,7 @@ now = datetime.datetime.now()
 last_day = (now - datetime.timedelta(1))
 
 # Укажите путь к вашему CSV-файлу
+
 csv_file_map = 'apps/data/base_result.csv'
 csv_file_prof = 'apps/data/UsersView.csv'
 csv_file_land = 'apps/data/LandData.csv'
@@ -40,6 +42,7 @@ csv_file_recip = 'apps/data/RecipientDate.csv'
 dfu = pd.read_csv(csv_file_map)
 df_prof = pd.read_csv(csv_file_prof)
 df_prof['Group1LandParcelArea'].replace(np.nan,0, regex=True, inplace=True)
+
 df_land = pd.read_csv(csv_file_land)
 df_animal = pd.read_csv(csv_file_animal)
 df_prog = pd.read_csv(csv_file_prog)
@@ -253,7 +256,7 @@ def get_header():
                        className="dia-button",
                        ),
         ],
-        brand=html.A(href="http://dar.gov.ua", target="http://dar.gov.ua", children=[html.Img(src=get_app_assets('DAR.png'), height="70px")]),
+        brand=html.A(href="http://dar.gov.ua", target="http://dar.gov.ua", children=[html.Img(src=get_app_assets('logo_IP_SAR2.png'), height="50px")]),
         brand_href="http://dar.gov.ua",
         color='#e2ecf4',
         fluid=True,
@@ -444,24 +447,58 @@ df_sity = pd.DataFrame({
 })
 
 df = pd.DataFrame({
-    'code': [i['properties']['name'] for i in geometry['features']],
-    'label': [i['properties']['name'] for i in geometry['features']],
-    'crude_rate': [ind + 1 for ind, i in enumerate(geometry['features'])],
-})
+        'code': [i['properties']['name'] for i in geometry['features']],
+        'label': [i['properties']['name'] for i in geometry['features']],
+        'crude_rate': [ind + 1 for ind, i in enumerate(geometry['features'])],
+    })
+
 
 def get_map():
     # Create a choropleth map using Plotly Express
+    colordict2 = {'Черкаська область': '#E2C89C',
+            'Чернігівська область': '#429488',
+            'Чернівецька область': '#A7D3AD',
+            'Автономна Республіка Крим': '#255a95',
+            'Дніпропетровська область': '#507776',
+            'Донецька область': '#5A6063',
+            'Івано-Франківська область': '#B2B58F',
+            'Харківська область': '#2E6B74',
+            'Херсонська область': '#4E80AD',
+            'Хмельницька область': '#75C67D',
+            'Київська область': '#7AD3C9',
+            'м. Київ': '#DB9519',
+            'Кіровоградська область': '#CCF2D3',
+            'Луганська область': '#6AA1A5',
+            'Львівська область': '#5E845E',
+            'Миколаївська область': '#CADEE5',
+            'Одеська область': '#AA906A',
+            'Полтавська область': '#4295A5',
+            'Рівненська область': '#0A634E',
+            'м. Севастополь': '#C6D86E',
+            'Сумська область': '#6AB4AC',
+            'Тернопільська область': '#659B8D',
+            'Закарпатська область': '#939367',
+            'Вінницька область': '#71A361',
+            'Волинська область': '#1C483F',
+            'Запорізька область': '#818F99',
+            'Житомирська область': '#A4EAE0',
+            }
     fig = px.choropleth(df,
                         geojson=geometry,
                         featureidkey='properties.name',
                         locations="code",
-                        color="crude_rate",
-                        color_continuous_scale="Viridis",
-                        hover_name="label",
-                        title="GDP per Capita by Country",
-                        labels={"crude_rate": "GDP per Capita"},
+                        color="label",
+                        # color="crude_rate",
+                        # color_continuous_scale="Viridis",
+                        color_discrete_map=colordict2,
+                        # range_color=(1, 27),
+                        # hover_name="label",
+                        # title="GDP per Capita by Country",
+                        # labels={"crude_rate": "GDP per Capita"},
                         custom_data=[df['label'], df['crude_rate']],
+                        fitbounds='geojson',
                         # height=750, width=750
+                        # center={'lat': 49, 'lon': 32},
 
                         )
 
@@ -481,18 +518,28 @@ def get_map():
     fig.update_layout(coloraxis_showscale=False)
     fig.update_layout(dragmode=False)
     fig.update_layout(mapbox=dict(style='light',zoom=8))
+
     # Добавьте точки для городов
     # fig.add_scattergeo(lat=df_sity['lon'],
     #                    lon=df_sity['lat'],
-    #                    mode='markers+text',
-    #                    marker=dict(size=10, color='red'),  # Настройте размер и цвет точек
-    #                    text=df_sity['location_column'],  # Используйте названия городов для текста
-    #                    textposition='bottom right')  # Расположение текста
+    #                    hoverinfo='none',
+    #                    mode='text', #'markers+text'
+    #                    # marker=dict(size=3, color='red'),  # Настройте размер и цвет точек
+    #                    text='<b>' + df_sity['location_column'] +'</b>' ,  # Используйте названия городов для текста
+    #                    # textposition='bottom right',   # Расположение текста
+    #                    textposition='bottom center',   # Расположение текста
+    # textposition = 'auto',
+    #                    textfont=dict(size=6, color='black'),
+    #                    )
     # fig.update_layout(
-    #     autosize=False,
-    #     width=1000,  # Установите желаемую ширину
-    #     height=600,  # Установите желаемую высоту
+    #     autosize=True,
+    #     width=1500,  # Установите желаемую ширину
+    #     # height=800,  # Установите желаемую высоту
     # )
+    fig.update_geos(lonaxis_range=[40, 60],
+    lataxis_range=[5, 10],
+     # projection_scale=0.5,
+    )
     # plot_div = plot(fig, output_type='div', include_plotlyjs=False)
     # fig.update_layout(
     #     autosize=False,
@@ -561,6 +608,50 @@ def get_selector2(idname, plholder, optionvalue,clerablebool, multibool):
                             )
     return selector
 
+def get_size_label(length):
+    if length <= 5:
+        return '[0-5]'
+    elif (length > 5 and length <= 120):
+        return '[5-120]'
+    elif (length > 120 and length <= 500):
+        return '[120-500]'
+    elif (length > 500 and length <= 1000):
+        return '[500-1000]'
+    else:
+        return '[>1000]'
+
+def get_fig_pieheatmap():
+    respie = dfu.groupby(['legalform'])['cntuser'].sum().reset_index()
+
+    def sortedx(inputStr):
+        order = {'[0-5]': 1, '[5-120]':2, '[120-500]':3, '[500-1000]':4, '[>1000]':5}
+        return order[inputStr]
+    dfhot = df_prof
+    dfhot['Group1LandParcelArea'].replace(np.nan, 0, regex=True, inplace=True)
+    dfhot['Range'] = dfhot['Group1LandParcelArea'].map(get_size_label)
+    dfhot['sorted'] = dfhot['Range'].map(sortedx)
+    resultdf = dfhot.groupby(['LegalForm', 'Range', 'sorted'])['Group1LandParcelArea'].sum().reset_index()
+    fig = make_subplots(rows=2,specs=[[{"type": "pie"}, ],[{"type": "heatmap"}, ]])
+    fig.add_trace(go.Pie(name='', values=respie['cntuser'], labels=respie['legalform'], hole=0.7,
+                         hovertemplate="Кіл-ть: %{value}"), 1, 1)
+    fig.update_traces(textposition='outside',textinfo='percent+label')
+
+    resultdf.sort_values(['LegalForm', 'sorted'], inplace=True)
+    fig.add_trace(go.Heatmap(name='', x=resultdf['Range'], y=resultdf['LegalForm'], z=resultdf['Group1LandParcelArea'],
+                             text=[f'{x:,.0f}'.replace(',', ' ') for x in resultdf['Group1LandParcelArea']],
+                             texttemplate="%{text} га",showlegend=False, showscale=False, colorscale='portland',
+                             hoverinfo='none',), 2, 1)
+
+    fig.update_layout(margin=dict(
+            l=0,
+            r=0,
+            b=0,
+            t=0,
+            pad=0
+        ) #go.Margin
+    )
+    fig.update(layout_showlegend=False)
+    return fig
 
 
 # Footer section

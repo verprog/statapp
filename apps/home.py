@@ -1,6 +1,7 @@
 # Import necessary libraries
 import geojson
 import json
+import locale
 import plotly.express as px
 import plotly.graph_objs as go
 import pandas as pd
@@ -15,18 +16,12 @@ navbar = commonmodules.get_header()
 footer = commonmodules.get_footer2()
 dfu = commonmodules.dfu
 mapIndicator = commonmodules.mapIndicator
-fig = commonmodules.get_map()
 selector_period = get_datepicker('date_picker')
 selector_type = get_selector('type_user_selector', "Вибір особи", commonmodules.typelst, True, False)
 selector_region = get_selector('region_selector', "Вибір регіонів", commonmodules.regionlst, True, True)
 
 
-
-
-
 # Data TOP ratio
-csv_file_prog = 'apps/data/ProgramsData.csv'
-df_prog = pd.read_csv(csv_file_prog)
 df_prog['Region'] = df_prog['Region'].str.replace('ОБЛАСТЬ', '')
 df_prog['iyear'] = pd.DatetimeIndex(df_prog['CreateAt']).year
 df_top = df_prog.groupby(['iyear','Region']).agg({'DesiredAmount': 'sum','ProvidedAmount': 'sum'}).reset_index()
@@ -34,17 +29,15 @@ df_top = df_prog.groupby(['iyear','Region']).agg({'DesiredAmount': 'sum','Provid
 def drawFigure(pdf,p_x,p_y, pname):
     return dcc.Graph(
                     figure=px.bar(
-                        data_frame=pdf, x=p_x, y=p_y,title=pname,orientation='h'
+                        data_frame=pdf, x=p_x, y=p_y, title=pname, orientation='h',
                     ).update_layout(
                         # plot_bgcolor='rgba(0, 0, 0, 0)',
                         # paper_bgcolor='rgba(0, 0, 0, 0)',
-                        xaxis=dict(
-                            # categoryorder='array',
-                            # categoryarray=None,
-                            title=None  # Убираем подпись оси X
+                        xaxis=dict(title=None  # Убираем подпись оси X
+                                    # categoryorder='array',
+                                    # categoryarray=None,
                         ),
-                        yaxis=dict(
-                            title=None  # Убираем подпись оси Y
+                        yaxis=dict(title=None  # Убираем подпись оси Y
                         )
                     ),
                     config={
@@ -53,15 +46,24 @@ def drawFigure(pdf,p_x,p_y, pname):
                 )
 
 
+card_icon = {
+    "color": "white",
+    "textAlign": "center",
+    "fontSize": 30,
+    "margin": "auto",
+}
+
+
 def drawText(pdata, pvalue):
-    return dbc.Col(dbc.Card([dbc.CardHeader(pdata, className="hederCard"),
-                               dbc.CardBody([html.Div([html.H2(f"{pvalue:,.0f}"), ], style={'textAlign': 'center'}, className="bodyCard")])],
+    return dbc.Col([dbc.Card([dbc.CardHeader(pdata, className="hederCard"),
+                               dbc.CardBody([html.Div([html.H3(f"{pvalue:,.0f}".replace(',', ' ')), ], style={'textAlign': 'center'}, className="bodyCard")])],
                     style={'min-width': '167px', 'min-height': '115px'}
-                    ), className="col")
+                    ),],className="col")
 
 
 mapIndicator = commonmodules.mapIndicator
 fig = commonmodules.get_map()
+figPie = commonmodules.get_fig_pieheatmap()
 navbar = commonmodules.get_header()
 footer = commonmodules.get_footer2()
 # dbc.Row(
@@ -69,10 +71,35 @@ footer = commonmodules.get_footer2()
 #                             [card for _ in range(3)],
 #                             direction='horizontal'
 #                         )
+tooltip = dbc.Tooltip(
+            "Приклад відображення "
+            "підсказок при наведені та обьект",
+            target="foolbody",
+        )
+
+
 layout = html.Div([navbar,
                 dbc.Card(
-                      dbc.CardBody([dbc.Row([drawText(i[0], i[1]) for i in mapIndicator.values], className="mb-4"),
-                      html.Br(),
+                      dbc.CardBody([
+                          dbc.Row(dbc.Col(
+                              dbc.Card(
+                                  [dbc.CardHeader('Мапа регіонів України',
+                                                  style={'textAlign': 'center',"font-family": "e-ukraine-heading"}),
+                                    dbc.CardBody(dcc.Graph(id='choropleth_map', figure=fig
+                                                           ,config={'scrollZoom': False, 'displayModeBar': False}
+                                                           ,style={'width': '100%', 'height': 'auto', 'margin': 'auto'}),
+                                                 style={'max-height': '400px',
+                                                         'width': '100%',
+                                                         'height': 'auto',
+                                                         'overflow': 'hidden',
+                                                         'text-align': 'center'})
+                                   ],)
+                              # ,className="flex-row flex-wrap"
+                          )
+                          ),
+                          html.Br(),
+                          dbc.Row([drawText(i[0], i[1]) for i in mapIndicator.values], className="flex-row flex-wrap"),
+                     html.Br(),
                       dbc.Row([
                           dbc.Col(dbc.Card([dbc.CardHeader('ТОП областей надання\отримання підтримки',
                                                            style={'textAlign': 'center',
@@ -101,8 +128,8 @@ layout = html.Div([navbar,
                                             )
                                             ],)
                                   ,className='colMapGraf'),
-                                dbc.Col(dbc.Card([dbc.CardHeader('Мапа регіонів України',style={'textAlign': 'center',"font-family": "e-ukraine-heading"}),
-                                                  dbc.CardBody(dcc.Graph(id='choropleth_map', figure=fig, config={'scrollZoom': False}),)]
+                                dbc.Col(dbc.Card([dbc.CardHeader('Профіль користувача ДАР',style={'textAlign': 'center',"font-family": "e-ukraine-heading"}),
+                                                  dbc.CardBody(dcc.Graph(id="graphPie", figure=figPie),)]
                                                  ,),className='colMapGraf'),], className="mb-4 row"),
                                 html.Br(),
                                 dbc.Row(dbc.Card(dbc.CardBody([selector_period, selector_type, selector_region],
@@ -113,8 +140,8 @@ layout = html.Div([navbar,
                                 dbc.Row(
                                     [dbc.Col([dbc.Button("Завантажити Excel", id="btn_xlsx", className="dia-excel"),
                                               dcc.Download(id="download-xlsx-map")], className="excelCol")]),
-                      ]), color='light',style={'background-color': '#e7f5f5'} ),
-                    footer])
+                      ]), color='light',style={'background-color': '#e7f5f5'}, id='foolbody' ),
+                    footer,tooltip],)
 
 
 
@@ -140,8 +167,9 @@ def update_graph(slider_year, radio_items):
         'data':[go.Bar(
             x=dfbar['value'],
             y=dfbar['region'],
-            text=dfbar['value'],
-            texttemplate=dfbar['region'].astype(str) + ' ' + ':' + ' ' + '%{text:0s}' + ' ' + 'Грн.',
+            # text=dfbar['value'],
+            text=[f'{x:,.0f}'.replace(',', ' ') for x in dfbar['value']],
+            texttemplate=dfbar['region'].astype(str) + ': ' + '%{text}' + ' грн',
             textposition='auto',
             marker=dict(color='#2471A3' if radio_items == 1 else '#117864'),
             orientation='h',
@@ -226,3 +254,4 @@ def func(n_clicks,table_data):
     df = pd.DataFrame.from_dict(table_data)
     if len(df)>0:
         return dcc.send_data_frame(df.to_excel, f"Map data {now.strftime('%Y-%m-%d_%H%M%S') }.xlsx", sheet_name="Sheet_1", index=False)
+

@@ -44,8 +44,8 @@ layout = html.Div([navbar,
           )
 def store_data(start_date, end_date, typ, area, gender, regionsel):
     begin, end = start_date, end_date
-    areaunit = get_rangearea(area)
-    condArea = " " if area is None or area == "" else "and (`Group1LandParcelArea`>=@areaunit['start'] and `Group1LandParcelArea`<@areaunit['end'])"
+    areamin,areamax = get_rangearea(area)['start'],get_rangearea(area)['end']
+    condArea = " " if area is None or area == "" else "and (`Group1LandParcelArea`>=@areamin and `Group1LandParcelArea`<@areamax)"
     condGen = " " if gender is None or gender == "" or gender == '-1' else "and `Gender` in (@gender)"
     condType = " " if typ is None or typ == "" else "and `LegalForm` in (@typ)"
     condRegion = " " if regionsel is None or regionsel == "" or regionsel == [] else "and `Region` in (@regionsel)"
