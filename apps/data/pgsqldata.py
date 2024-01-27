@@ -2,9 +2,6 @@ import os
 import pandas as pd
 import psycopg2 as pg
 
-
-
-
 def readfile(pathfile):
     with open(pathfile, 'r') as fd:
         sqlFile = fd.read()
@@ -26,6 +23,6 @@ if __name__ == '__main__':
     for fl in files:
         txt = readfile(f"./qry/{fl}")
         res = pgsql_to_df(txt)
-        res.to_csv(f"./qry/{fl.replace('.sql', '.csv')}", index=False, header=True)
+        res.to_csv(f"./{fl.replace('.sql', '.csv')}", index=False, header=True)
         print(f'Done extract data from qry: {fl}')
     print('End extract')

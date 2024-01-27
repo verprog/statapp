@@ -111,7 +111,7 @@ layout = html.Div([navbar,
                                                                    {'label': 'TOP 5 наданю', 'value': 1},
                                                                    {'label': 'TOP 5 запрошено', 'value': 2}],
                                                                value=1,
-                                                               style={'text-align': 'center', 'color': 'black', 'padding-left': '10px'}, inline=True, className='gap-3'),
+                                                               style={'text-align': 'center', 'color': 'black'}, inline=True, className='gap-3'),
                                                 dcc.Graph(id='bartop_chart', config={'displayModeBar': False}),
                                                     html.P('Виберіть рік', style={'text-align': 'center', 'color': 'black'}),
                                                     dcc.Slider(id='slider_year',
@@ -129,7 +129,8 @@ layout = html.Div([navbar,
                                             ],)
                                   ,className='colMapGraf'),
                                 dbc.Col(dbc.Card([dbc.CardHeader('Профіль користувача ДАР',style={'textAlign': 'center',"font-family": "e-ukraine-heading"}),
-                                                  dbc.CardBody(dcc.Graph(id="graphPie", figure=figPie),)]
+                                                  dbc.CardBody(dcc.Graph(id="graphPie", figure=figPie,
+                                                            config={'displayModeBar': False}),)]
                                                  ,),className='colMapGraf'),], className="mb-4 row"),
                                 html.Br(),
                                 dbc.Row(dbc.Card(dbc.CardBody([selector_period, selector_type, selector_region],

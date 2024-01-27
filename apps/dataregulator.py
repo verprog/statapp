@@ -9,7 +9,7 @@ csv_file_path =(os.getcwd()+r'\data\base_result.csv')
 # Прочитайте CSV-файл и создайте DataFrame
 dfu = pd.read_csv(csv_file_path)
 
-conn = sqlite3.connect("pythonsqlite.sqlite")
+conn = sqlite3.connect("./data/datasqlite.sqlite")
 
 ##push the dataframe to sql
 # dfu.to_sql("my_data", conn, if_exists="replace")
