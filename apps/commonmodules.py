@@ -93,7 +93,7 @@ dict(id='QuantityAnimal', name='Загальна кількість тварин
 df_profile[['NameProgram','TypeProgram','LegalForm','Id','Region','District','CreateAt',
 'organization','DesiredAmount','ProvidedAmount','Area','LandParcelCount','QuantityAnimal','AnimalCount']]
 
-df_prof = df_prof[['RegistrationDate','LegalForm', 'Region', 'Id', 'Gender', 'KindName', 'Group1LandParcelArea']]
+df_prof = df_prof[['RegistrationDate','LegalForm', 'Region', 'Id', 'Gender', 'KindName', 'Group1LandParcelArea','DrfoCode']]
 mapcolumn = {'area': 'Площа, га.', 'animal': 'Кількість тварин', 'giftamount': 'Надано підтримки, грн',
                'cntuser': 'Кількість кадастрових номерів'}
 
@@ -630,16 +630,16 @@ def get_fig_pieheatmap():
     dfhot['Group1LandParcelArea'].replace(np.nan, 0, regex=True, inplace=True)
     dfhot['Range'] = dfhot['Group1LandParcelArea'].map(get_size_label)
     dfhot['sorted'] = dfhot['Range'].map(sortedx)
-    resultdf = dfhot.groupby(['LegalForm', 'Range', 'sorted'])['Group1LandParcelArea'].sum().reset_index()
+    resultdf = dfhot.groupby(['LegalForm', 'Range', 'sorted'])['DrfoCode'].count().reset_index()
     fig = make_subplots(rows=2,specs=[[{"type": "pie"}, ],[{"type": "heatmap"}, ]])
     fig.add_trace(go.Pie(name='', values=respie['cntuser'], labels=respie['legalform'], hole=0.7,
                          hovertemplate="Кіл-ть: %{value}"), 1, 1)
     fig.update_traces(textposition='outside',textinfo='percent+label')
 
     resultdf.sort_values(['LegalForm', 'sorted'], inplace=True)
-    fig.add_trace(go.Heatmap(name='', x=resultdf['Range'], y=resultdf['LegalForm'], z=resultdf['Group1LandParcelArea'],
-                             text=[f'{x:,.0f}'.replace(',', ' ') for x in resultdf['Group1LandParcelArea']],
-                             texttemplate="%{text} га",showlegend=False, showscale=False, colorscale='portland',
+    fig.add_trace(go.Heatmap(name='', x=resultdf['Range'], y=resultdf['LegalForm'], z=resultdf['DrfoCode'],
+                             text=[f'{x:,.0f}'.replace(',', ' ') for x in resultdf['DrfoCode']],
+                             texttemplate="%{text}",showlegend=False, showscale=False, colorscale='blues',
                              hoverinfo='none',), 2, 1)
 
     fig.update_layout(margin=dict(
