@@ -488,36 +488,38 @@ def get_map():
                         featureidkey='properties.name',
                         locations="code",
                         color="label",
-                        # color="crude_rate",
-                        # color_continuous_scale="Viridis",
                         color_discrete_map=colordict2,
-                        # range_color=(1, 27),
-                        # hover_name="label",
                         # title="GDP per Capita by Country",
                         # labels={"crude_rate": "GDP per Capita"},
                         custom_data=[df['label'], df['crude_rate']],
+                        hover_name=None,
+                        hover_data=None,
                         fitbounds='geojson',
-                        # height=750, width=750
-                        # center={'lat': 49, 'lon': 32},
-
                         )
 
-    fig.update_layout(  mapbox=dict(style='light', center=dict(lat=48.3794, lon=31.1656),),
+    fig.update_layout(  mapbox=dict(style='light',zoom=8 , center=dict(lat=48.3794, lon=31.1656),),
                         margin={"r": 0, "t": 0, "l": 0, "b": 0},
                         showlegend=False,
                         geo_scope="europe",
                         title='variable',
                         uirevision='constant',
-                        clickmode='event' #'event+select'
+                        clickmode='event', #'event+select'
+                        coloraxis_showscale=False,
+                        dragmode=False
                         )
 
-    hovertemp = '<i>Територія:</i> %{customdata[0]}<br><i>Код регіону:</i> %{customdata[1]}<br>'
+    # hovertemp = '<i>Територія:</i> %{customdata[0]}<br><i>Код регіону:</i> %{customdata[1]}<br><i>Кіл-ть користувачів:</i> 111111<br><i>Кіл-ть тварин:</i> 3332<br>'
+    hovertemp = "<br>".join([
+                        "Код регіону:: %{customdata[1]}",
+                        "Кіл-ть користувачів: 111111",
+                        "Кіл-ть тварин: 3332",
+                    ])
+
+
     fig.update_traces(hovertemplate=hovertemp)
-    fig.update_geos(fitbounds="locations", visible=False)
-    # # fig.update(layout_coloraxis_showscale=False)
-    fig.update_layout(coloraxis_showscale=False)
-    fig.update_layout(dragmode=False)
-    fig.update_layout(mapbox=dict(style='light',zoom=8))
+    fig.update_layout(hovermode="closest")
+    fig.update_geos(fitbounds="locations", visible=False, lonaxis_range=[40, 60], lataxis_range=[5, 10],) # projection_scale=0.5,
+    # # fig.update(layout_coloraxis_showscale=False) hoverinfo='none',
 
     # Добавьте точки для городов
     # fig.add_scattergeo(lat=df_sity['lon'],
@@ -536,10 +538,7 @@ def get_map():
     #     width=1500,  # Установите желаемую ширину
     #     # height=800,  # Установите желаемую высоту
     # )
-    fig.update_geos(lonaxis_range=[40, 60],
-    lataxis_range=[5, 10],
-     # projection_scale=0.5,
-    )
+
     # plot_div = plot(fig, output_type='div', include_plotlyjs=False)
     # fig.update_layout(
     #     autosize=False,
@@ -634,12 +633,13 @@ def get_fig_pieheatmap():
     fig = make_subplots(rows=2,specs=[[{"type": "pie"}, ],[{"type": "heatmap"}, ]])
     fig.add_trace(go.Pie(name='', values=respie['cntuser'], labels=respie['legalform'], hole=0.7,
                          hovertemplate="Кіл-ть: %{value}"), 1, 1)
+    fig.update_traces(marker=dict(colors=['#4E80AD', '#A4EAE0', '#75C67D']))
     fig.update_traces(textposition='outside',textinfo='percent+label')
 
     resultdf.sort_values(['LegalForm', 'sorted'], inplace=True)
     fig.add_trace(go.Heatmap(name='', x=resultdf['Range'], y=resultdf['LegalForm'], z=resultdf['DrfoCode'],
                              text=[f'{x:,.0f}'.replace(',', ' ') for x in resultdf['DrfoCode']],
-                             texttemplate="%{text}",showlegend=False, showscale=False, colorscale='blues',
+                             texttemplate="%{text}",showlegend=False, showscale=False, colorscale='mint',
                              hoverinfo='none',), 2, 1)
 
     fig.update_layout(margin=dict(

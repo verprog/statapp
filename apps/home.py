@@ -172,7 +172,7 @@ def update_graph(slider_year, radio_items):
             text=[f'{x:,.0f}'.replace(',', ' ') for x in dfbar['value']],
             texttemplate=dfbar['region'].astype(str) + ': ' + '%{text}' + ' грн',
             textposition='auto',
-            marker=dict(color='#2471A3' if radio_items == 1 else '#117864'),
+            marker=dict(color='#7AD3C9' if radio_items == 1 else '#75C67D'),
             orientation='h',
             hoverinfo='text',
             width=0.5,
