@@ -97,12 +97,9 @@
 }
 
 
-.VirtualizedSelectOption {
-  overflow: hidden;
-  font-size: 12px;
-}
+.VirtualizedSelectOption {  white-space: nowrap; overflow: visible; font-size: 12px;}
 
-/*.VirtualizedSelectOption { white-space: nowrap; overflow: scroll; text-overflow: ellipsis; }*/
+/* .VirtualizedSelectOption { white-space: nowrap; overflow: scroll; text-overflow: ellipsis; } */
 
 .DateInput_input, .DateInput_input_1 {
   Height: 30px;

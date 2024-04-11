@@ -38,6 +38,7 @@ csv_file_animal = 'apps/data/AnimalData.csv'
 csv_file_prog = 'apps/data/ProgramsData.csv'
 csv_file_recip = 'apps/data/RecipientDate.csv'
 
+
 # Прочитайте CSV-файл и создайте DataFrame
 dfu = pd.read_csv(csv_file_map)
 df_prof = pd.read_csv(csv_file_prof)
@@ -48,52 +49,74 @@ df_animal = pd.read_csv(csv_file_animal)
 df_prog = pd.read_csv(csv_file_prog)
 df_profile = pd.read_csv(csv_file_recip)
 
-
-# df_prog.to_excel(f"df_prog json.xlsx", sheet_name="Sheet_1", index=False)
-# df_profile.to_excel(f"df_profile json.xlsx", sheet_name="Sheet_1", index=False)
-
 formatnum0 = dict(specifier=',.2f', locale=dict(separate_4digits=False))
 formatnum2 = dict(specifier=',.2f', locale=dict(separate_4digits=False))
 columnsdict=\
 [dict(id='registrationdate', name='Дата реєстрації'),
 dict(id='RegistrationDate', name='Дата реєстрації'),
+dict(id='RegistrationDate', name='Дата реєстрації'),
+dict(id='catottg_region', name='Катоттг Область'),
 dict(id='region', name='Регіон'),
 dict(id='Region', name='Регіон'),
-dict(id='legalform', name='Тип особи'),
-dict(id='LegalForm', name='Тип особи'),
-dict(id='area', name='Площа, га.', type='numeric', format=formatnum2),
-dict(id='Area', name='Загальна площа землі', type='numeric', format=formatnum2),
-dict(id='animal', name='Кіл-сть тварин', type='numeric', format=formatnum0),
-dict(id='Animal', name='Кіл-сть тварин', type='numeric', format=formatnum0),
-dict(id='giftamount', name='Надано підтримки, грн', type='numeric', format=formatnum2),
-dict(id='cntuser', name='Кількість користувачів', type='numeric', format=formatnum0),
-dict(id='KindName', name='КВЕД'),
-dict(id='Id', name='Користувач'),
-dict(id='Gender', name='Стать'),
-dict(id='Group1LandParcelArea', name='Площа, га.', type='numeric', format=formatnum2),
-dict(id='PropRight', name='Тип речового права'),
-dict(id='Purpose', name='КВЕД'),
-dict(id='Subject', name='Субєкти', type='numeric', format=formatnum0),
-dict(id='Name', name='Вид тварини'),
-dict(id='SexName', name='Назва'),
-dict(id='AnimalGender', name='Стать'),
+dict(id='catottg_district', name='Катоттг Район'),
+dict(id='District', name='Район'),
+dict(id='catottg_community', name='Катоттг Тер.Громада'),
+dict(id='Community', name='Тариторіальна громада'),
 dict(id='CreateAt', name='Дата подачі заявки'),
 dict(id='TypeProgram', name='Тип програми'),
 dict(id='NameProgram', name='Назва програми'),
 dict(id='organization', name='Надавач підтримки'),
+dict(id='legalform', name='Тип особи'),
+dict(id='LegalForm', name='Тип особи'),
+dict(id='KindName', name='КВЕД'),
+dict(id='Purpose', name='КВЕД'),
+dict(id='Id', name='Користувач'),
+dict(id='Gender', name='Стать'),
+dict(id='Group1LandParcelArea', name='Площа, га.', type='numeric', format=formatnum2),
+dict(id='PropRight', name='Тип речового права'),
+dict(id='Name', name='Вид тварини'),
+dict(id='SexName', name='Назва'),
+dict(id='AnimalGender', name='Стать'),
 dict(id='TotalAmount', name='Бюджет програми', type='numeric', format=formatnum2),
 dict(id='DesiredAmount', name='Запросили суму', type='numeric', format=formatnum2),
 dict(id='ProvidedAmount', name='Отримана сума', type='numeric', format=formatnum2),
+dict(id='giftamount', name='Надано підтримки, грн', type='numeric', format=formatnum2),
+dict(id='cntuser', name='Кількість користувачів', type='numeric', format=formatnum0),
+dict(id='area', name='Площа, га.', type='numeric', format=formatnum2),
+dict(id='Area', name='Загальна площа землі', type='numeric', format=formatnum2),
 dict(id='LandParcelCount', name='Площа землі у заявці', type='numeric', format=formatnum2),
+dict(id='animal', name='Кіл-сть тварин', type='numeric', format=formatnum0),
+dict(id='Animal', name='Кіл-сть тварин', type='numeric', format=formatnum0),
 dict(id='AnimalCount', name='Кількість тварин у заявці', type='numeric', format=formatnum0),
-dict(id='District', name='Район'),
 dict(id='QuantityAnimal', name='Загальна кількість тварин', type='numeric', format=formatnum0),
-]
+dict(id='Subject', name='Субєкти', type='numeric', format=formatnum0),
+dict(id='Назва організації', name='Назва організації'),
+dict(id='Назва програми', name='Назва програми'),
+dict(id='Тип програми', name='Тип програми'),
+dict(id='Назва етапу', name='Назва етапу'),
+dict(id='Номер етапу', name='Номер етапу'),
+dict(id='Обсяг', name='Обсяг'),
+dict(id='ProgramAmountUnitOfMeasure', name='Одиниці виміру допомоги'),
+dict(id='Дата відправлення реєстру', name='Дата відправлення реєстру'),
+dict(id='Сформував', name='Сформував'),
+dict(id='Статус', name='Статус'),
+dict(id='Область', name='Область'),
+dict(id='Район', name='Район'),
+dict(id='Населений пункт', name='Населений пункт'),
+dict(id='Реєстраційний номер заявки', name='Реєстраційний номер заявки'),
+dict(id='Дата рєстрації заявки', name='Дата рєстрації заявки'),
+dict(id='Реєстраційний номер', name='Реєстраційний номер'),
+dict(id='Дата реєстрації', name='Дата реєстрації'),
+dict(id='Назва або ПІБ сільгосвиробника', name='Назва або ПІБ сільгосвиробника'),
+dict(id='Тип особи', name='Тип особи'),
+dict(id='Податковий номер', name='Податковий номер'),
+dict(id='IBAN рахунку для виплат', name='IBAN рахунку для виплат'),
+dict(id='Обсяг підтримки', name='Обсяг підтримки')]
 
 df_profile[['NameProgram','TypeProgram','LegalForm','Id','Region','District','CreateAt',
 'organization','DesiredAmount','ProvidedAmount','Area','LandParcelCount','QuantityAnimal','AnimalCount']]
 
-df_prof = df_prof[['RegistrationDate','LegalForm', 'Region', 'Id', 'Gender', 'KindName', 'Group1LandParcelArea','DrfoCode']]
+df_prof = df_prof[['registrationdate','catottg_region','Region','catottg_district','District','LegalForm', 'Id', 'Gender', 'KindName', 'Group1LandParcelArea','DrfoCode']]
 mapcolumn = {'area': 'Площа, га.', 'animal': 'Кількість тварин', 'giftamount': 'Надано підтримки, грн',
                'cntuser': 'Кількість кадастрових номерів'}
 
@@ -139,7 +162,8 @@ def get_selector(idname, plholder, optionvalue,clerablebool, multibool):
             value='',
             clearable=clerablebool,
             multi=multibool,
-            className='data-bs-offset'
+            className='data-bs-offset',
+            # optionHeight=30
         )
     ], style={'min-width': '20em'}) #, 'padding-top': '3px'
     return selector
@@ -156,6 +180,15 @@ def get_datepicker(idname):
                           end_date=last_day.date(),
                           display_format='DD.MM.YYYY',
                           style={'max-height': '25px', 'padding-top': '3px'})
+    # datepicker_period = dmc.DateRangePicker(id=idname,
+    #                                         firstDayOfWeek=1,
+    #                                         minDate=datetime.date(2010, 1, 1),
+    #                                         maxDate=last_day.date(),
+    #                                         initialMonth=last_day.date(),
+    #                                         value=[last_day.replace(day=1).replace(month=1).date(),last_day.date()],
+    #                                         # style={"width": 330},
+    #                                         locale="uk",
+    #                                         )
     return datepicker_period
 
 

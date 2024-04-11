@@ -41,12 +41,24 @@ layout = html.Div([navbar,
            Input('typesup_selector_profile', 'value')],
           )
 def store_data(start_date, end_date, provider, typepro, typesup):
+    dfreestr = pd.read_csv('apps/data/registerpayments.csv')
+    dfreestr = dfreestr[['Назва організації','Назва програми','Тип програми','Назва етапу','Номер етапу','Обсяг','ProgramAmountUnitOfMeasure',
+    'Дата відправлення реєстру','Статус','Область','Район','Населений пункт','Реєстраційний номер заявки','Дата рєстрації заявки',
+    'Реєстраційний номер','Дата реєстрації','Тип особи','Обсяг підтримки']]
+    # dfreestr.rename(columns={k: k.replace(' ', '_') for k in dfreestr.columns if k.count(' ') > 0}, inplace=True)
+
     begin = start_date
     end = end_date
-    condprovider = " " if provider is None or provider == "" or provider == [] else "and (`organization` in (@provider))"
-    condtypepro = " " if typepro is None or typepro == "" or typepro == [] else "and (`TypeProgram` in (@typepro))"
-    condtypesup = " " if typesup is None or typesup == "" or typesup == [] else "and (`NameProgram` in (@typesup))"
-    filter_data = df_profile.query(f"(`CreateAt`>=@begin and `CreateAt`<=@end) {condprovider} {condtypepro} {condtypesup}")
+    # condprovider = " " if provider is None or provider == "" or provider == [] else "and (`organization` in (@provider))"
+    # condtypepro = " " if typepro is None or typepro == "" or typepro == [] else "and (`TypeProgram` in (@typepro))"
+    # condtypesup = " " if typesup is None or typesup == "" or typesup == [] else "and (`NameProgram` in (@typesup))"
+    # filter_data = df_profile.query(f"(`CreateAt`>=@begin and `CreateAt`<=@end) {condprovider} {condtypepro} {condtypesup}")
+    #
+    # return get_table(filter_data,'table-filtering-profile')
+    condprovider = " " if provider is None or provider == "" or provider == [] else "and (`Назва організації` in (@provider))"
+    condtypepro = " " if typepro is None or typepro == "" or typepro == [] else "and (`Тип програми` in (@typepro))"
+    condtypesup = " " if typesup is None or typesup == "" or typesup == [] else "and (`Назва програми` in (@typesup))"
+    filter_data = dfreestr.query(f"(`Дата відправлення реєстру`>=@begin and `Дата відправлення реєстру`<=@end) {condprovider} {condtypepro} {condtypesup}")
 
     return get_table(filter_data,'table-filtering-profile')
 
@@ -62,5 +74,5 @@ def func(n_clicks, table_data):
     now = datetime.datetime.now()
     df = pd.DataFrame.from_dict(table_data)
     if len(df) > 0:
-        return dcc.send_data_frame(df.to_excel, f"User profile data {now.strftime('%Y-%m-%d_%H%M%S')}.xlsx",
+        return dcc.send_data_frame(df.to_excel, f"Register payments data {now.strftime('%Y-%m-%d_%H%M%S')}.xlsx",
                                    sheet_name="Sheet_1", index=False)

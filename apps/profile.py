@@ -49,8 +49,8 @@ def store_data(start_date, end_date, typ, area, gender, regionsel):
     condGen = " " if gender is None or gender == "" or gender == '-1' else "and `Gender` in (@gender)"
     condType = " " if typ is None or typ == "" else "and `LegalForm` in (@typ)"
     condRegion = " " if regionsel is None or regionsel == "" or regionsel == [] else "and `Region` in (@regionsel)"
-    filter_data = df_prof.query(f"(`RegistrationDate`>=@begin and `RegistrationDate`<=@end) {condType} {condRegion} {condArea} {condGen}")
-
+    filter_data = df_prof.query(f"(`registrationdate`>=@begin and `registrationdate`<=@end) {condType} {condRegion} {condArea} {condGen}")
+    print(filter_data.columns)
     return get_table(filter_data,'table-filtering-prof')
 
 

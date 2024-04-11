@@ -21,13 +21,18 @@ SELECT
 uac."Id" as ID,
 sum(coalesce(uac."Amount",0)) as GIFTAMOUNT
 FROM public."UserApplicationsView" uac
-group by uac."Id")
-select ud.REGISTRATIONDATE,REGION,LEGALFORM,
+group by uac."Id"),
+region as (
+SELECT left(dv."Code",19) as CATOTTG_REGION,dv."Name" 
+from public."DictionariesView" dv where dv."Id" between 122523 and 154269 and right(dv."Code",1) in ('Î','M'))
+select 
+ud.REGISTRATIONDATE,rg.CATOTTG_REGION,ud.REGION,ud.LEGALFORM,
 sum(coalesce(AREA,0)) AREA,sum(coalesce(ad.ANIMAL,0)) ANIMAL,sum(coalesce(up.GIFTAMOUNT,0)) GIFTAMOUNT,count(ud.ID) cntuser
 from 
 userdata as ud
 left join landdata as ld on ld.ID=ud.ID
 left join animaldata as ad on ad.ID=ud.ID
 left join userprogdata as up on up.ID=ud.ID
-group by ud.REGISTRATIONDATE,REGION,LEGALFORM
+left join region as rg on rg."Name"=ud.REGION
+group by ud.REGISTRATIONDATE,rg.CATOTTG_REGION,ud.REGION,ud.LEGALFORM
 order by 1 desc
