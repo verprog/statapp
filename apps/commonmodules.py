@@ -522,8 +522,6 @@ def get_map():
                         locations="code",
                         color="label",
                         color_discrete_map=colordict2,
-                        # title="GDP per Capita by Country",
-                        # labels={"crude_rate": "GDP per Capita"},
                         custom_data=[df['label'], df['crude_rate']],
                         hover_name=None,
                         hover_data=None,
@@ -551,8 +549,8 @@ def get_map():
 
     fig.update_traces(hovertemplate=hovertemp)
     fig.update_layout(hovermode="closest")
-    fig.update_geos(fitbounds="locations", visible=False, lonaxis_range=[40, 60], lataxis_range=[5, 10],) # projection_scale=0.5,
-    # # fig.update(layout_coloraxis_showscale=False) hoverinfo='none',
+    fig.update_geos(lonaxis_range=[40, 60], lataxis_range=[5, 10],) # projection_scale=0.5,
+    fig.update_geos(fitbounds="locations", visible=False)
 
     # Добавьте точки для городов
     # fig.add_scattergeo(lat=df_sity['lon'],
@@ -572,20 +570,6 @@ def get_map():
     #     # height=800,  # Установите желаемую высоту
     # )
 
-    # plot_div = plot(fig, output_type='div', include_plotlyjs=False)
-    # fig.update_layout(
-    #     autosize=False,
-    #     margin=dict(
-    #         l=0,
-    #         r=0,
-    #         b=0,
-    #         t=0,
-    #         pad=4,
-    #         autoexpand=True
-    #     ),
-    #     # width=800,
-    # #     height=400,
-    # )
     return fig
 
 
@@ -642,21 +626,21 @@ def get_selector2(idname, plholder, optionvalue,clerablebool, multibool):
 
 def get_size_label(length):
     if length <= 5:
-        return '[0-5]'
+        return '[0-5 га]'
     elif (length > 5 and length <= 120):
-        return '[5-120]'
+        return '[5-120 га]'
     elif (length > 120 and length <= 500):
-        return '[120-500]'
+        return '[120-500 га]'
     elif (length > 500 and length <= 1000):
-        return '[500-1000]'
+        return '[500-1000 га]'
     else:
-        return '[>1000]'
+        return '[>1000 га]'
 
 def get_fig_pieheatmap():
     respie = dfu.groupby(['legalform'])['cntuser'].sum().reset_index()
 
     def sortedx(inputStr):
-        order = {'[0-5]': 1, '[5-120]':2, '[120-500]':3, '[500-1000]':4, '[>1000]':5}
+        order = {'[0-5 га]': 1, '[5-120 га]':2, '[120-500 га]':3, '[500-1000 га]':4, '[>1000 га]':5}
         return order[inputStr]
     dfhot = df_prof
     dfhot['Group1LandParcelArea'].replace(np.nan, 0, regex=True, inplace=True)

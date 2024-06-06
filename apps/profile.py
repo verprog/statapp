@@ -40,17 +40,18 @@ layout = html.Div([navbar,
            Input('type_user_selector_prof', 'value'),
            Input('area_selector_prof', 'value'),
            Input('gender_selector_prof', 'value'),
-           Input('region_selector_prof', 'value')],
+           Input('region_selector_prof', 'value'),
+           Input('kved_selector_prof', 'value')],
           )
-def store_data(start_date, end_date, typ, area, gender, regionsel):
+def store_data(start_date, end_date, typ, area, gender, regionsel, kved):
     begin, end = start_date, end_date
     areamin,areamax = get_rangearea(area)['start'],get_rangearea(area)['end']
     condArea = " " if area is None or area == "" else "and (`Group1LandParcelArea`>=@areamin and `Group1LandParcelArea`<@areamax)"
     condGen = " " if gender is None or gender == "" or gender == '-1' else "and `Gender` in (@gender)"
     condType = " " if typ is None or typ == "" else "and `LegalForm` in (@typ)"
     condRegion = " " if regionsel is None or regionsel == "" or regionsel == [] else "and `Region` in (@regionsel)"
-    filter_data = df_prof.query(f"(`registrationdate`>=@begin and `registrationdate`<=@end) {condType} {condRegion} {condArea} {condGen}")
-    print(filter_data.columns)
+    condkved = " " if kved is None or kved == "" or kved == [] else "and (`KindName` in (@kved))"
+    filter_data = df_prof.query(f"(`registrationdate`>=@begin and `registrationdate`<=@end) {condType} {condRegion} {condArea} {condGen} {condkved}")
     return get_table(filter_data,'table-filtering-prof')
 
 

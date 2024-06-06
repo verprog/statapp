@@ -19,6 +19,7 @@ idea/
 test*.*
 .sqlite
 .gitignore
+.csv
 
 # Distribution / packaging
 .Python

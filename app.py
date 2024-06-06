@@ -1,7 +1,7 @@
 import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, State, dcc, html, callback
-from apps import landbank, animals, supportflows, recipients, home, baseresult, profile,  commonmodules
+from apps import landbank, animals, supportflows, recipients, home, profile,  commonmodules
 
 app = dash.Dash(assets_folder='assets',
     # external_stylesheets=[dbc.themes.BOOTSTRAP],
@@ -44,8 +44,6 @@ def render_page_content(pathname):
         return supportflows.layout #, f"{nm} - Аналіз напрямів підтримки"
     elif pathname == "/recipients":
         return recipients.layout #, f"{nm} - Перелік отримувачів"
-    elif pathname == "/base":
-        return baseresult.layout #, f"{nm} - Основні результати"
     # If the user tries to reach a different page, return a 404 message
     return html.Div(
         [
@@ -80,4 +78,4 @@ def toggle_collapse(n, is_open):
 
 
 if __name__ == "__main__":
-    app.run_server()
+    app.run_server(port=8051)
