@@ -21,6 +21,7 @@ test*.*
 .gitignore
 .csv
 *.csv
+*.parquet.gzip
 
 
 # Distribution / packaging
