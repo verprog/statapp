@@ -25,6 +25,7 @@ if __name__ == '__main__':
     for fl in files:
         txt = readfile(f"./qry/{fl}")
         res = pgsql_to_df(txt)
+        print(res.columns)
         # res.to_csv(f"./{fl.replace('.sql', '.csv')}", index=False, header=True)
         res.to_parquet(f"./{fl.replace('.sql', '.parquet.gzip')}",compression='gzip')
         print(f'Done extract data from qry: {fl}')
