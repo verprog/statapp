@@ -1,26 +1,23 @@
-from dash import dcc,html
-from dash.dependencies import Input, Output
+# from dash import dcc,html
+# from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 # Import necessary libraries
-import geojson
+# import geojson
 from plotly.subplots import make_subplots
 import json
 import plotly.express as px
-import plotly.offline as plot
+# import plotly.offline as plot
 import plotly.graph_objects as go
 import pandas as pd
 import numpy as np
 from dash import Dash, dcc, html, Output, Input, State, callback, no_update, dash_table, dash
-import dash_ag_grid as dag
+# import dash_ag_grid as dag
 import dash_mantine_components as dmc
 from dash.dash_table.Format import Format, Scheme, Trim
 from dash_iconify import DashIconify
 import datetime
-
-
-
-
 # pd.options.display.float_format = '{:,.2f}'.format
+
 
 def get_app_assets(name):
     res = f"/assets/{name}"
@@ -29,28 +26,24 @@ def get_app_assets(name):
 now = datetime.datetime.now()
 last_day = (now - datetime.timedelta(1))
 
-# Укажите путь к вашему CSV-файлу
 
-csv_file_map = 'apps/data/base_result.csv'
-csv_file_prof = 'apps/data/UsersView.csv'
-csv_file_land = 'apps/data/LandData.csv'
-csv_file_animal = 'apps/data/AnimalData.csv'
-csv_file_prog = 'apps/data/ProgramsData.csv'
-csv_file_recip = 'apps/data/RecipientDate.csv'
+csv_file_map = 'apps/data/base_result.parquet.gzip'
+csv_file_prof = 'apps/data/UsersView.parquet.gzip'
+csv_file_land = 'apps/data/LandData.parquet.gzip'
+csv_file_animal = 'apps/data/AnimalData.parquet.gzip'
+csv_file_prog = 'apps/data/ProgramsData.parquet.gzip'
+csv_file_recip = 'apps/data/RecipientDate.parquet.gzip'
 
 
 # Прочитайте CSV-файл и создайте DataFrame
-dfu = pd.read_csv(csv_file_map)
-df_prof = pd.read_csv(csv_file_prof)
-df_prof['Group1LandParcelArea'].replace(np.nan,0, regex=True, inplace=True)
-
-df_land = pd.read_csv(csv_file_land)
-df_animal = pd.read_csv(csv_file_animal)
-df_prog = pd.read_csv(csv_file_prog)
-df_profile = pd.read_csv(csv_file_recip)
+dfu = pd.read_parquet(csv_file_map)
+df_prof = pd.read_parquet(csv_file_prof)
+df_land = pd.read_parquet(csv_file_land)
+df_animal = pd.read_parquet(csv_file_animal)
+df_prog = pd.read_parquet(csv_file_prog)
+df_profile = pd.read_parquet(csv_file_recip)
 
 formatnum0 = dict(specifier=',.2f', locale=dict(separate_4digits=False))
-formatnum2 = dict(specifier=',.2f', locale=dict(separate_4digits=False))
 columnsdict=\
 [dict(id='registrationdate', name='Дата реєстрації'),
 dict(id='RegistrationDate', name='Дата реєстрації'),
@@ -72,19 +65,19 @@ dict(id='KindName', name='КВЕД'),
 dict(id='Purpose', name='КВЕД'),
 dict(id='Id', name='Користувач'),
 dict(id='Gender', name='Стать'),
-dict(id='Group1LandParcelArea', name='Площа, га.', type='numeric', format=formatnum2),
+dict(id='Group1LandParcelArea', name='Площа, га.', type='numeric', format=formatnum0),
 dict(id='PropRight', name='Тип речового права'),
 dict(id='Name', name='Вид тварини'),
 dict(id='SexName', name='Назва'),
 dict(id='AnimalGender', name='Стать'),
-dict(id='TotalAmount', name='Бюджет програми', type='numeric', format=formatnum2),
-dict(id='DesiredAmount', name='Запросили суму', type='numeric', format=formatnum2),
-dict(id='ProvidedAmount', name='Отримана сума', type='numeric', format=formatnum2),
-dict(id='giftamount', name='Надано підтримки, грн', type='numeric', format=formatnum2),
+dict(id='TotalAmount', name='Бюджет програми', type='numeric', format=formatnum0),
+dict(id='DesiredAmount', name='Запросили суму', type='numeric', format=formatnum0),
+dict(id='ProvidedAmount', name='Отримана сума', type='numeric', format=formatnum0),
+dict(id='giftamount', name='Надано підтримки, грн', type='numeric', format=formatnum0),
 dict(id='cntuser', name='Кількість користувачів', type='numeric', format=formatnum0),
-dict(id='area', name='Площа, га.', type='numeric', format=formatnum2),
-dict(id='Area', name='Загальна площа землі', type='numeric', format=formatnum2),
-dict(id='LandParcelCount', name='Площа землі у заявці', type='numeric', format=formatnum2),
+dict(id='area', name='Площа, га.', type='numeric', format=formatnum0),
+dict(id='Area', name='Загальна площа землі', type='numeric', format=formatnum0),
+dict(id='LandParcelCount', name='Площа землі у заявці', type='numeric', format=formatnum0),
 dict(id='animal', name='Кіл-сть тварин', type='numeric', format=formatnum0),
 dict(id='Animal', name='Кіл-сть тварин', type='numeric', format=formatnum0),
 dict(id='AnimalCount', name='Кількість тварин у заявці', type='numeric', format=formatnum0),

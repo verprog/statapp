@@ -29,5 +29,6 @@ uv."DrfoCode",max(uv."Group1LandParcelArea") "Area"
 		left join dictviews dv2 on dv2."Name"=uv."District"
 		group by uv."Id", uv."LegalForm",uv."Region",uv."District",uv."DrfoCode",left(dv."Code",19),left(dv2."Code",19) ) uv on uv."Id"=uav."Id"
 left join (select av."Id",sum(av."Quantity") as "QuantityAnimal" from public."AnimalsView" av group by av."Id") av on av."Id"=uv."Id"
+where pv."type" in ('Пряме субсидування з Державного Бюджету','Надання грантів в рамках міжнародної фінансової допомоги','Підтримка фермерських господарств та інших виробників сільськогосподарської продукції')
 group by pv."Name",pv."type",uv."LegalForm",uv."Id",uv.CATOTTG_REGION,uv."Region",uv.CATOTTG_DISTRICT,uv."District",uv."DrfoCode",to_char(uav."CreateAt",'yyyy-mm-dd'),
 pv.organization,uv."Area",av."QuantityAnimal"
