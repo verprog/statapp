@@ -20,6 +20,8 @@ test*.*
 .sqlite
 .gitignore
 .csv
+*.csv
+
 
 # Distribution / packaging
 .Python
