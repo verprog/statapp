@@ -23,10 +23,13 @@ if __name__ == '__main__':
     files = [f for f in os.listdir('./qry') if f.endswith('.sql')]
     print(files)
     for fl in files:
-        txt = readfile(f"./qry/{fl}")
-        res = pgsql_to_df(txt)
-        print(res.columns)
-        # res.to_csv(f"./{fl.replace('.sql', '.csv')}", index=False, header=True)
-        res.to_parquet(f"./{fl.replace('.sql', '.parquet.gzip')}",compression='gzip')
-        print(f'Done extract data from qry: {fl}')
+        if fl!='registerpayments.sql':
+            pass
+        else:
+            txt = readfile(f"./qry/{fl}")
+            res = pgsql_to_df(txt)
+            print(res.columns)
+            # res.to_csv(f"./{fl.replace('.sql', '.csv')}", index=False, header=True)
+            res.to_parquet(f"./{fl.replace('.sql', '.parquet.gzip')}",compression='gzip')
+            print(f'Done extract data from qry: {fl}')
     print('End extract')
