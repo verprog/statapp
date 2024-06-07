@@ -18,6 +18,5 @@ join public."UserApplicationsView" uav on uav."ProgramId"=pv."Id"
 join (select uv."Id",coalesce(uv."LegalForm",'Не визначено') "LegalForm",coalesce(uv."Region",'Не визначений') as "Region" 
 from public."UsersView" uv group by uv."Id", uv."LegalForm",uv."Region" ) uv on uv."Id"=uav."Id"
 left join dictviews dv on dv."Name"=uv."Region"
-where 
-pv."type" in ('Пряме субсидування з Державного Бюджету','Надання грантів в рамках міжнародної фінансової допомоги','Підтримка фермерських господарств та інших виробників сільськогосподарської продукції')
+/*where pv."type" in ('Пряме субсидування з Державного Бюджету','Надання грантів в рамках міжнародної фінансової допомоги','Підтримка фермерських господарств та інших виробників сільськогосподарської продукції')*/
 group by to_char(uav."CreateAt",'yyyy-mm-dd'),uv."LegalForm",left(dv."Code",19),uv."Region",pv."type",pv."Name",pv.organization,pv."TotalAmount" 

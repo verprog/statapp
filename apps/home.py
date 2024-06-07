@@ -20,9 +20,10 @@ selector_period = get_datepicker('date_picker')
 selector_type = get_selector('type_user_selector', "Вибір особи", commonmodules.typelst, True, False)
 selector_region = get_selector('region_selector', "Вибір регіонів", commonmodules.regionlst, True, True)
 
-
+print(df_prog.columns)
 # Data TOP ratio
-df_prog['Region'] = df_prog['Region'].str.replace('ОБЛАСТЬ', '')
+
+df_prog['Region'] = df_prog['Region'].astype(str).str.replace('ОБЛАСТЬ', '')
 df_prog['iyear'] = pd.DatetimeIndex(df_prog['CreateAt']).year
 df_top = df_prog.groupby(['iyear','Region']).agg({'DesiredAmount': 'sum','ProvidedAmount': 'sum'}).reset_index()
 

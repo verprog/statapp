@@ -41,7 +41,7 @@ layout = html.Div([navbar,
            Input('typesup_selector_profile', 'value')],
           )
 def store_data(start_date, end_date, provider, typepro, typesup):
-    dfreestr = pd.read_csv('apps/data/registerpayments.csv')
+    dfreestr = pd.read_parquet('apps/data/registerpayments.parquet.gzip')
     dfreestr = dfreestr[['Назва організації','Назва програми','Тип програми','Назва етапу','Номер етапу','Обсяг','ProgramAmountUnitOfMeasure',
     'Дата відправлення реєстру','Статус','Область','Район','Населений пункт','Реєстраційний номер заявки','Дата рєстрації заявки',
     'Реєстраційний номер','Дата реєстрації','Тип особи','Обсяг підтримки']]
