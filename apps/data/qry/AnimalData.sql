@@ -1,4 +1,4 @@
-with dictviews as (select *from public."DictionariesView" dv where dv."Id" between 122523 and 154269 and right(dv."Code",1) in ('О','M'))
+with dictviews as (select *from public."DictionariesView" dv where dv."Id" between 122523 and 154269 and right(dv."Code",1) in ('Рћ','M'))
 select 
 uv."LegalForm",
 left(dv."Code",19) as CATOTTG_REGION,
@@ -6,32 +6,32 @@ uv."Region",
 al."Name",
 al."SexName", 
 case 
-when trim(al."SexName") in ('Свинка','Коза','Ярка','Телиця','Вівцематка','Кобила','Корова','Свиноматка','Свинка (товарна)',
-'Вівцематка',
-'Кобила',
-'Коза',
-'Корова',
-'Свинка',
-'Свинка (товарна)',
-'Свиноматка',
-'Свиноматка (товарна)',
-'Телиця',
-'Ярка'
-) then 'Самиці'
-when trim(al."SexName") in ('Цапи, козлики','Жеребець','Бугаєць,бугай','Кнур, кнурець','Барани, баранчики',
-'Жеребець',
-'Кнур, кнурець',
-'Кнур, кнурець ',
-'Кнур, кнурець (товарна)',
-'Барани, баранчики',
-'Бугаєць,бугай',
-'Валухи',
-'Мерин',
-'Цапи, козлики') then 'Самці' end "AnimalGender",
+when trim(al."SexName") in ('РЎРІРёРЅРєР°','РљРѕР·Р°','РЇСЂРєР°','РўРµР»РёС†СЏ','Р’С–РІС†РµРјР°С‚РєР°','РљРѕР±РёР»Р°','РљРѕСЂРѕРІР°','РЎРІРёРЅРѕРјР°С‚РєР°','РЎРІРёРЅРєР° (С‚РѕРІР°СЂРЅР°)',
+'Р’С–РІС†РµРјР°С‚РєР°',
+'РљРѕР±РёР»Р°',
+'РљРѕР·Р°',
+'РљРѕСЂРѕРІР°',
+'РЎРІРёРЅРєР°',
+'РЎРІРёРЅРєР° (С‚РѕРІР°СЂРЅР°)',
+'РЎРІРёРЅРѕРјР°С‚РєР°',
+'РЎРІРёРЅРѕРјР°С‚РєР° (С‚РѕРІР°СЂРЅР°)',
+'РўРµР»РёС†СЏ',
+'РЇСЂРєР°'
+) then 'РЎР°РјРёС†С–'
+when trim(al."SexName") in ('Р¦Р°РїРё, РєРѕР·Р»РёРєРё','Р–РµСЂРµР±РµС†СЊ','Р‘СѓРіР°С”С†СЊ,Р±СѓРіР°Р№','РљРЅСѓСЂ, РєРЅСѓСЂРµС†СЊ','Р‘Р°СЂР°РЅРё, Р±Р°СЂР°РЅС‡РёРєРё',
+'Р–РµСЂРµР±РµС†СЊ',
+'РљРЅСѓСЂ, РєРЅСѓСЂРµС†СЊ',
+'РљРЅСѓСЂ, РєРЅСѓСЂРµС†СЊ ',
+'РљРЅСѓСЂ, РєРЅСѓСЂРµС†СЊ (С‚РѕРІР°СЂРЅР°)',
+'Р‘Р°СЂР°РЅРё, Р±Р°СЂР°РЅС‡РёРєРё',
+'Р‘СѓРіР°С”С†СЊ,Р±СѓРіР°Р№',
+'Р’Р°Р»СѓС…Рё',
+'РњРµСЂРёРЅ',
+'Р¦Р°РїРё, РєРѕР·Р»РёРєРё') then 'РЎР°РјС†С–' end "AnimalGender",
 sum(coalesce(al."Quantity",0)) as "animal"
 FROM 
 public."AnimalsView" al 
-left join (select uv."Id",coalesce(uv."LegalForm",'Не визначено') "LegalForm",coalesce(uv."Region",'Не визначено') as "Region" 
+left join (select uv."Id",coalesce(uv."LegalForm",'РќРµ РІРёР·РЅР°С‡РµРЅРѕ') "LegalForm",coalesce(uv."Region",'РќРµ РІРёР·РЅР°С‡РµРЅРѕ') as "Region" 
 from public."UsersView" uv group by uv."Id", uv."LegalForm",uv."Region" ) uv on uv."Id"=al."Id"
 left join dictviews dv on dv."Name"=uv."Region"
 group by uv."LegalForm",left(dv."Code",19),uv."Region",al."Name",al."SexName"

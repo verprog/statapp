@@ -1,4 +1,4 @@
-with dictviews as (select *from public."DictionariesView" dv where dv."Id" between 122523 and 154269 and right(dv."Code",1) in ('О','M','P'))
+with dictviews as (select *from public."DictionariesView" dv where dv."Id" between 122523 and 154269 and right(dv."Code",1) in ('Рћ','M','P'))
 SELECT  
 pv."Name" as "NameProgram",
 pv."type" as "TypeProgram",
@@ -20,9 +20,9 @@ sum(coalesce(uav."AnimalCount",0)) "AnimalCount"
 FROM 
 public."ProgramsView" pv
 join public."UserApplicationsView" uav on uav."ProgramId"=pv."Id" 
-join (select uv."Id",coalesce(uv."LegalForm",'Не визначено') "LegalForm",
-left(dv."Code",19) as CATOTTG_REGION,coalesce(uv."Region",'Не визначений') as "Region",
-left(dv2."Code",19) as CATOTTG_DISTRICT,coalesce(uv."District",'Не визначений') "District",
+join (select uv."Id",coalesce(uv."LegalForm",'РќРµ РІРёР·РЅР°С‡РµРЅРѕ') "LegalForm",
+left(dv."Code",19) as CATOTTG_REGION,coalesce(uv."Region",'РќРµ РІРёР·РЅР°С‡РµРЅРёР№') as "Region",
+left(dv2."Code",19) as CATOTTG_DISTRICT,coalesce(uv."District",'РќРµ РІРёР·РЅР°С‡РµРЅРёР№') "District",
 uv."DrfoCode",max(uv."Group1LandParcelArea") "Area" 
 		from public."UsersView" uv 
 		left join dictviews dv on dv."Name"=uv."Region"

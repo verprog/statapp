@@ -1,1 +1,1 @@
-select * from public."RegisterPaymentsView" rp
+select * from public."RegisterPaymentsView" rp 

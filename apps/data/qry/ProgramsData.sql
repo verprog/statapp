@@ -1,4 +1,4 @@
-with dictviews as (select *from public."DictionariesView" dv where dv."Id" between 122523 and 154269 and right(dv."Code",1) in ('О','M','P'))
+with dictviews as (select *from public."DictionariesView" dv where dv."Id" between 122523 and 154269 and right(dv."Code",1) in ('Рћ','M','P'))
 SELECT  
 to_char(uav."CreateAt",'yyyy-mm-dd') "CreateAt",
 uv."LegalForm",
@@ -15,7 +15,7 @@ sum(coalesce(uav."AnimalCount",0)) "AnimalCount"
 FROM 
 public."ProgramsView" pv
 join public."UserApplicationsView" uav on uav."ProgramId"=pv."Id" 
-join (select uv."Id",coalesce(uv."LegalForm",'Не визначено') "LegalForm",coalesce(uv."Region",'Не визначений') as "Region" 
+join (select uv."Id",coalesce(uv."LegalForm",'РќРµ РІРёР·РЅР°С‡РµРЅРѕ') "LegalForm",coalesce(uv."Region",'РќРµ РІРёР·РЅР°С‡РµРЅРёР№') as "Region" 
 from public."UsersView" uv group by uv."Id", uv."LegalForm",uv."Region" ) uv on uv."Id"=uav."Id"
 left join dictviews dv on dv."Name"=uv."Region"
 group by to_char(uav."CreateAt",'yyyy-mm-dd'),uv."LegalForm",left(dv."Code",19),uv."Region",pv."type",pv."Name",pv.organization,pv."TotalAmount" 
