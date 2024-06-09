@@ -23,6 +23,17 @@ def get_app_assets(name):
     res = f"/assets/{name}"
     return res
 
+def get_animal_gender(row):
+    if row['SexName'] in ['Свинка', 'Коза', 'Ярка', 'Телиця', 'Вівцематка', 'Кобила', 'Корова', 'Свиноматка', 'Свинка (товарна)',
+'Вівцематка', 'Кобила','Коза','Корова','Свинка','Свинка (товарна)','Свиноматка','Свиноматка (товарна)','Телиця','Ярка']:
+        return 'Самиці'
+    elif row['SexName'] in ['Цапи, козлики', 'Жеребець', 'Бугаєць,бугай', 'Кнур, кнурець', 'Барани, баранчики','Жеребець','Кнур, кнурець','Кнур, кнурець ',
+'Кнур, кнурець (товарна)','Барани, баранчики','Бугаєць,бугай','Валухи','Мерин','Цапи, козлики']:
+        return 'Самці'
+    else:
+        return 'Не опізнано'
+
+
 now = datetime.datetime.now()
 last_day = (now - datetime.timedelta(1))
 
@@ -34,14 +45,15 @@ csv_file_animal = 'apps/data/AnimalData.parquet.gzip'
 csv_file_prog = 'apps/data/ProgramsData.parquet.gzip'
 csv_file_recip = 'apps/data/RecipientDate.parquet.gzip'
 
-
+type_program = ['Пряме субсидування з Державного Бюджету','Надання грантів в рамках міжнародної фінансової допомоги','Підтримка фермерських господарств та інших виробників сільськогосподарської продукції']
 # Прочитайте CSV-файл и создайте DataFrame
 dfu = pd.read_parquet(csv_file_map)
 df_prof = pd.read_parquet(csv_file_prof)
 df_land = pd.read_parquet(csv_file_land)
 df_animal = pd.read_parquet(csv_file_animal)
-df_prog = pd.read_parquet(csv_file_prog)
-df_profile = pd.read_parquet(csv_file_recip)
+df_animal['AnimalGender'] = df_animal.apply(get_animal_gender, axis=1)
+df_prog = pd.read_parquet(csv_file_prog).query('`TypeProgram` in (@type_program)')
+df_profile = pd.read_parquet(csv_file_recip).query('`TypeProgram` in (@type_program)')
 
 formatnum0 = dict(specifier=',.2f', locale=dict(separate_4digits=False))
 columnsdict=\

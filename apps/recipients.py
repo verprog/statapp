@@ -3,7 +3,7 @@ import plotly.express as px
 import pandas as pd
 from dash import Dash, dcc, html, Output, Input, State, callback, no_update, dash_table
 from apps import commonmodules
-from apps.commonmodules import get_table, get_selector, get_datepicker
+from apps.commonmodules import get_table, get_selector, get_datepicker, type_program
 import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
 
@@ -41,7 +41,9 @@ layout = html.Div([navbar,
            Input('typesup_selector_profile', 'value')],
           )
 def store_data(start_date, end_date, provider, typepro, typesup):
-    dfreestr = pd.read_parquet('apps/data/registerpayments.parquet.gzip')
+
+    dfreestr = pd.read_parquet('apps/data/registerpayments.parquet.gzip').query('`Тип програми` in (@type_program)')
+
     dfreestr = dfreestr[['Назва організації','Назва програми','Тип програми','Назва етапу','Номер етапу','Обсяг','ProgramAmountUnitOfMeasure',
     'Дата відправлення реєстру','Статус','Область','Район','Населений пункт','Реєстраційний номер заявки','Дата рєстрації заявки',
     'Реєстраційний номер','Дата реєстрації','Тип особи','Обсяг підтримки']]
