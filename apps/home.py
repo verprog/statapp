@@ -119,11 +119,11 @@ layout = html.Div([navbar,
                                                                included=False,
                                                                updatemode='drag',
                                                                tooltip={'always_visible': True},
-                                                               min=2020,
+                                                               min=2022,
                                                                max=2024,
                                                                step=1,
                                                                value=2023,
-                                                               marks={str(yr): str(yr) for yr in range(2020, 2024, 1)},
+                                                               marks={str(yr): str(yr) for yr in range(2022, 2024, 1)},
                                                                ),
                                             ],
                                             )
@@ -146,27 +146,26 @@ layout = html.Div([navbar,
                     footer,tooltip],)
 
 
-
 @callback(Output('bartop_chart', 'figure'),
-              [Input('slider_year', 'value')],
-              [Input('radio_items', 'value')])
+          [Input('slider_year', 'value')],
+          [Input('radio_items', 'value')])
 def update_graph(slider_year, radio_items):
-
     terr1 = df_prog.groupby(['Region', 'iyear'])[['DesiredAmount', 'ProvidedAmount']].sum().reset_index()
 
-    terr2 = terr1[(terr1['iyear'] == slider_year)][['iyear', 'Region', 'DesiredAmount']].sort_values(by = ['DesiredAmount'], ascending = False).nlargest(5, columns = ['DesiredAmount']).reset_index()
-    terr3 = terr1[(terr1['iyear'] == slider_year)][['iyear', 'Region', 'ProvidedAmount']].sort_values(by = ['ProvidedAmount'], ascending = False).nlargest(5, columns = ['ProvidedAmount']).reset_index()
-
+    terr2 = terr1[(terr1['iyear'] == slider_year)][['iyear', 'Region', 'DesiredAmount']].sort_values(
+        by=['DesiredAmount'], ascending=False).nlargest(5, columns=['DesiredAmount']).reset_index()
+    terr3 = terr1[(terr1['iyear'] == slider_year)][['iyear', 'Region', 'ProvidedAmount']].sort_values(
+        by=['ProvidedAmount'], ascending=False).nlargest(5, columns=['ProvidedAmount']).reset_index()
 
     if radio_items == 1:
-        dfbar = terr2[['DesiredAmount','Region']]
-        dfbar = dfbar.rename(columns={'DesiredAmount':'value','Region':'region'})
+        dfbar = terr2[['DesiredAmount', 'Region']]
+        dfbar = dfbar.rename(columns={'DesiredAmount': 'value', 'Region': 'region'})
     elif radio_items == 2:
-        dfbar = terr3[['ProvidedAmount','Region']]
-        dfbar = dfbar.rename(columns={'ProvidedAmount':'value','Region':'region'})
+        dfbar = terr3[['ProvidedAmount', 'Region']]
+        dfbar = dfbar.rename(columns={'ProvidedAmount': 'value', 'Region': 'region'})
 
     return {
-        'data':[go.Bar(
+        'data': [go.Bar(
             x=dfbar['value'],
             y=dfbar['region'],
             # text=dfbar['value'],
@@ -184,7 +183,6 @@ def update_graph(slider_year, radio_items):
 
         )],
 
-
         'layout': go.Layout(
             # plot_bgcolor='#F2F2F2',
             # paper_bgcolor='#F2F2F2',
@@ -199,7 +197,7 @@ def update_graph(slider_year, radio_items):
                        linecolor='black',
                        # linewidth=1,
                        ticks='',  # 'outside',
-                       tickfont=dict(family='e-ukraine',size=10,color='black')
+                       tickfont=dict(family='e-ukraine', size=10, color='black')
                        ),
 
             yaxis=dict(title='<b></b>',
@@ -211,7 +209,7 @@ def update_graph(slider_year, radio_items):
                        linecolor='black',
                        linewidth=1,
                        ticks='outside',
-                       tickfont=dict(family='e-ukraine',size=10,color='black')
+                       tickfont=dict(family='e-ukraine', size=10, color='black')
                        ),
 
             legend={
@@ -221,8 +219,8 @@ def update_graph(slider_year, radio_items):
                 'y': 1.25,
                 'xanchor': 'center',
                 'yanchor': 'top'},
-                font=dict(family="e-ukraine",size=12,color='black',
-            )
+            font=dict(family="e-ukraine", size=12, color='black',
+                      )
         )
 
     }

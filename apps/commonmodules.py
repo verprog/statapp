@@ -178,10 +178,10 @@ def get_datepicker(idname):
                           id=idname,
                           first_day_of_week=1,
                           day_size=50,
-                          min_date_allowed=datetime.date(2010, 1, 1),
+                          min_date_allowed=datetime.date(2013, 1, 1),
                           max_date_allowed=last_day.date(),
                           initial_visible_month=last_day.date(),
-                          start_date=last_day.replace(day=1).replace(month=1).date(),
+                          start_date=last_day.replace(day=1).date(), #.replace(month=1)
                           end_date=last_day.date(),
                           display_format='DD.MM.YYYY',
                           style={'max-height': '25px', 'padding-top': '3px'})
