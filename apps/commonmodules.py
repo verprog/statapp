@@ -205,6 +205,7 @@ def get_table(data, idname):
     format_table = dict(page_current=0,
                         page_size=20,
                         sort_action='native',
+                        virtualization=True,
                         style_table={'overflowX': 'auto'},
                         style_header={"border": "1px solid black",
                                       "textAlign": "center",
