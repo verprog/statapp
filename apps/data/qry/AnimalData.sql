@@ -1,4 +1,4 @@
-with dictviews as (select *from public."DictionariesView" dv where dv."Id" between 122523 and 154269 and right(dv."Code",1) in ('О','M'))
+with dictviews as (select *from public."DictionariesView" dv where dv."ParentId"=122523)
 select 
 uv."LegalForm",
 left(dv."Code",19) as CATOTTG_REGION,

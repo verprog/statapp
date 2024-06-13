@@ -19,7 +19,7 @@ av."QuantityAnimal",
 sum(coalesce(uav."AnimalCount",0)) "AnimalCount"
 FROM 
 public."ProgramsView" pv
-join public."UserApplicationsView" uav on uav."ProgramId"=pv."Id" 
+join public."UserApplicationsView" uav on  uav."ProgramId"=pv."Id"
 join (select uv."Id",coalesce(uv."LegalForm",'Не визначено') "LegalForm",
 left(dv."Code",19) as CATOTTG_REGION,coalesce(uv."Region",'Не визначений') as "Region",
 left(dv2."Code",19) as CATOTTG_DISTRICT,coalesce(uv."District",'Не визначений') "District",

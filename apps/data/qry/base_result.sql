@@ -24,7 +24,7 @@ FROM public."UserApplicationsView" uac
 group by uac."Id"),
 region as (
 SELECT left(dv."Code",19) as CATOTTG_REGION,dv."Name" 
-from public."DictionariesView" dv where dv."Id" between 122523 and 154269 and right(dv."Code",1) in ('Î','M'))
+from public."DictionariesView" dv where dv."ParentId"=122523)
 select 
 ud.REGISTRATIONDATE,rg.CATOTTG_REGION,ud.REGION,ud.LEGALFORM,
 sum(coalesce(AREA,0)) AREA,sum(coalesce(ad.ANIMAL,0)) ANIMAL,sum(coalesce(up.GIFTAMOUNT,0)) GIFTAMOUNT,count(ud.ID) cntuser
