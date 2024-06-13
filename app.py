@@ -2,7 +2,7 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, State, dcc, html, callback
 from apps import landbank, animals, supportflows, recipients, home, profile,  commonmodules
-import logguru
+
 
 app = dash.Dash(assets_folder='assets',
     # external_stylesheets=[dbc.themes.BOOTSTRAP],
