@@ -1,4 +1,4 @@
-with dictviews as (select *from public."DictionariesView" dv where dv."Id" between 122523 and 154269 and  right(dv."Code",1) in ('О','M','P'))
+with dictviews as (select *from public."DictionariesView" dv where dv."Id" between 122523 and 154269 /* and  right(dv."Code",1) in ('О','M','P') */)
 SELECT  
 to_char(uav."CreateAt",'yyyy-mm-dd') "CreateAt",
 uv."LegalForm",
