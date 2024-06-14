@@ -181,7 +181,7 @@ def get_datepicker(idname):
                           min_date_allowed=datetime.date(2013, 1, 1),
                           max_date_allowed=last_day.date(),
                           initial_visible_month=last_day.date(),
-                          start_date=last_day.replace(day=1).date(), #.replace(month=1)
+                          start_date=last_day.replace(month=1).replace(day=1).date(),
                           end_date=last_day.date(),
                           display_format='DD.MM.YYYY',
                           style={'max-height': '25px', 'padding-top': '3px'})
